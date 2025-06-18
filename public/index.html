@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mxtBot - Trang Chủ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body></body>
+
+    <div class="particles" id="particles"></div>
+    
+    <header class="header">
+    <div class="nav-container">
+        <div class="logo custom-logo"></div> <nav>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#home">Trang Chủ</a></li>
+                    <li><a href="#features">Tính Năng</a></li>
+                    <li><a href="#pricing">Bảng Giá</a></li>
+                    <li><a href="#contact">Liên Hệ</a></li>
+
+                    <li id="discordNavLoginBtnContainer">
+                        <button class="discord-nav-btn" onclick="loginWithDiscord()">
+                            Đăng nhập <img src="https://media.discordapp.net/attachments/1207890745684656160/1384845088886362112/6fc66498602546a772ab6c15ee3937e8-removebg-preview.png?ex=6853e8fe&is=6852977e&hm=ce5c9e3871f7e5c97f2c1675796eecbe38518fe7dafbf2a1f47225453ed283e3&=&format=webp&quality=lossless" alt="Discord Logo" class="discord-button-logo">
+                        </button>
+                    </li>
+
+                    <li id="loggedInUserDisplay" style="display: none;">
+                        <div class="user-info-container"> 
+                            <img id="discordAvatarDisplay" src="" alt="Discord Avatar" class="discord-avatar">
+                            <span id="displayUsername" class="username-text"></span> 
+                            <button id="logoutNavBtn" class="logout-btn">Đăng xuất</button>
+                        </div>
+                    </li>
+                </ul>
+                <div class="mobile-menu" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>UPDATE YOUR PREMIUM</h1>
+            <p>mxt Bot Discord của sự thân thiện.</p>
+            <a href="#pricing" class="cta-button">NHẬN PREMIUM NGAY</a>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">TÍNH NĂNG PREMIUM</h2>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🚀</div>
+                    <h3>TỐC ĐỘ ÁNH SÁNG</h3>
+                    <p>Bộ nhớ đệm nâng cao và mã được tối ưu hóa đảm bảo bot của bạn phản hồi ngay lập tức với mọi lệnh.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>KIỂM DUYỆT NÂNG CAO</h3>
+                    <p>Tự động kiểm duyệt, chống spam và thực thi quy tắc tùy chỉnh để giữ server của bạn sạch sẽ.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🎮</div>
+                    <h3>TÍNH NĂNG GAMING</h3>
+                    <p>Hệ thống tiền tệ, giftcode, event riêng biệt mang phong cách của bạn.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">⚙️</div>
+                    <h3>LỆNH TỰ CHỈNH</h3>
+                    <p>Tạo lệnh tùy chỉnh không giới hạn và tự động hóa server của bạn với script nâng cao.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">📊</div>
+                    <h3>PHÂN TÍCH DỮ LIỆU</h3>
+                    <p>Phân tích server chi tiết, theo dõi hoạt động người dùng và thông tin chi tiết về tăng trưởng.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🔧</div>
+                    <h3>HỖ TRỢ 24/7</h3>
+                    <p>Hỗ trợ premium với quyền truy cập trực tiếp vào đội ngũ phát triển bất cứ khi nào bạn cần giúp đỡ.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2 class="section-title">LỰA CHỌN PREMIUM</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card fade-in" data-plan="Temp Voice" data-price="30000">
+                    <h3 class="plan-name">Temp Voice</h3>
+                    <div class="plan-price">30k<span>/tháng</span></div>
+                    <p class="plan-description">Hoàn hảo cho cộng đồng nhỏ</p>
+                    <ul class="plan-features">
+                        <li>Sử dụng full tính năng kênh thoại</li>
+                        <li>Tự quản lý Mcoin, Giftcode</li>
+                        <li>Mở full tính năng Minigame</li>
+                    </ul>
+                    <button class="plan-button buy-button">THANH TOÁN</button>
+                </div>
+
+                <div class="pricing-card popular fade-in" data-plan="MINIGAME" data-price="50000">
+                    <h3 class="plan-name">MINIGAME</h3>
+                    <div class="plan-price">50k<span>/tháng</span></div>
+                    <p class="plan-description">Phổ biến nhất cho server gaming</p>
+                    <ul class="plan-features">
+                        <li>Tạo server Mcoin riêng</li>
+                        <li>Tự quản lý và thiết lập dòng tiền trong server</li>
+                        <li>Tự do tạo Giftcode trong server</li>
+                    </ul>
+                    <button class="plan-button buy-button">THANH TOÁN</button>
+                </div>
+
+                <div class="pricing-card fade-in" data-plan="CUSTOM" data-price="200000"> <h3 class="plan-name">CUSTOM</h3>
+                    <div class="plan-price">≥ 200k<span>/tháng</span></div>
+                    <p class="plan-description">Dành cho cộng đồng gaming nghiêm túc</p>
+                    <ul class="plan-features">
+                        <li>Setup Bot riêng theo yêu cầu</li>
+                        <li>Hỗ trợ đa server</li>
+                        <li>Phân tích nâng cao</li>
+                        <li>Tính năng bot tùy chỉnh</li>
+                        <li>Truy cập API</li>
+                        <li>Hỗ trợ server FiveM GTA V</li>
+                        <li>Hỗ trợ chuyên dụng</li>
+                    </ul>
+                    <button class="plan-button buy-button">THANH TOÁN</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="contact-content">
+                <h2>SẴN SÀNG NÂNG CẤP?</h2>
+                <p>Tham gia cộng đồng Discord của chúng tôi để được thiết lập và hỗ trợ ngay lập tức!</p>
+                <button class="join-server-btn cta-button" onclick="window.open('https://discord.gg/7Q8mzW4DGt', '_blank')">
+    <span class="fa-brands fa-discord"></span> Tham gia máy chủ
+</button>
+            </div>
+        </div>
+    </section>
+    
+    <footer class="footer">
+    <div class="footer-content">
+        <p>&copy;2024 POWERED BY MXT NETWORK.</p>
+        <div class="footer-links">
+            <a href="privacy-policy.html" class="privacy-policy-link">Privacy Policy</a>
+        </div>
+    </div>
+</footer>
+
+    <div id="paymentModal" class="payment-modal">
+    <div class="payment-modal-content">
+        <span class="close-button" onclick="closePaymentModal()">&times;</span>
+        <h2 id="paymentPlanTitle">Thanh Toán Gói <span id="modalPlanNameDisplay"></span></h2> 
+        
+        <div id="discordLoginSection" style="display: none;">
+            <p>Vui lòng đăng nhập Discord để tiếp tục thanh toán.</p>
+            <button class="join-discord-button cta-button" onclick="loginWithDiscord()">Đăng nhập Discord</button>
+            </div>
+
+        <div id="paymentDetailsSection" style="display: none;">
+            <p id="paymentIntroText">Vui lòng quét mã QR dưới đây để hoàn tất thanh toán.</p>
+            <div class="qr-code-container">
+                <img id="qrCodeImage" src="" alt="Mã QR Thanh Toán" class="qr-code-image">
+            </div>
+            <div class="payment-details">
+                <p><strong>Gói:</strong> <span id="paymentDetailsPlanName"></span></p> 
+                <p><strong>Số tiền:</strong> <span id="selectedPlanAmount"></span> VNĐ</p>
+                <p><strong>Nội dung chuyển khoản:</strong> <span id="transferContentText"></span></p> 
+                <p><strong>Chủ tài khoản:</strong> <span id="displayBankAccountName"></span></p>
+                <p><strong>Tên Ngân hàng:</strong> <span id="displayBankName"></span></p>
+                <p><strong>Số tài khoản:</strong> <span id="bankAccountNumber"></span></p>
+                <p class="small-text" id="paymentInstructionText">Vui lòng ghi đúng nội dung chuyển khoản để đơn hàng được xử lý tự động.</p>
+            </div>
+            <p id="paymentStatusMessage" style="margin-top: 15px; font-weight: bold; color: #00ffff;"></p>
+            <p id="paymentCountdown">Thời gian còn lại: 30:00</p>
+        </div>
+            
+        <div id="contactAdminMessage" style="display: none;">
+            <p>Bạn cần liên hệ trực tiếp với Admin tại Discord server để đưa ra yêu cầu, chúng tôi sẽ dựa theo yêu cầu của bạn và quyết định mức giá.</p>
+        </div>
+    </div>
+</div>
+
+<div id="successModal" class="success-modal">
+    <div class="success-modal-content">
+        <span class="close-button" onclick="closeSuccessModal()">&times;</span>
+        <h2>Thanh Toán Thành Công! 🎉</h2>
+        <p>Cảm ơn bạn đã mua gói Premium!</p>
+        <p>Gói đã mua: <strong id="successPlanNameDisplay"></strong></p>
+        <p>Số tiền: <strong id="successPlanAmountDisplay"></strong> VNĐ</p>
+        
+        <p>Vui lòng nhập ID máy chủ Discord của bạn để chúng tôi nâng cấp gói:</p>
+        <p>Đã đăng nhập với: <strong id="discordUsernameDisplay"></strong> (ID: <span id="discordUserIdDisplay"></span>)</p>
+        <input type="text" id="discordServerId" class="server-id-input" placeholder="Nhập ID máy chủ Discord của bạn">
+        <button class="submit-server-id-button" onclick="submitUpgradeRequest()">Xác nhận</button>
+        <p class="small-text">Bạn có thể tìm ID máy chủ bằng cách bật chế độ nhà phát triển trong Discord, sau đó nhấp chuột phải vào tên máy chủ và chọn "Sao chép ID".</p>
+    </div>
+</div>
+
+    <script src="script.js"></script>
+    <!-- THÊM ĐOẠN MÃ JAVASCRIPT ĐỂ CHỈNH ÂM LƯỢNG NGAY SAU script.js -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const audioPlayer = document.getElementById('backgroundMusic');
+            
+            if (audioPlayer) {
+                // ĐIỀU CHỈNH ÂM LƯỢNG Ở ĐÂY
+                // Giá trị từ 0.0 (tắt tiếng) đến 1.0 (âm lượng tối đa)
+                audioPlayer.volume = 0.3; // Ví dụ: đặt âm lượng là 30%
+
+                // LƯU Ý VỀ AUTOPLAY:
+                // Do hạn chế của trình duyệt, nếu nhạc không tự động phát,
+                // bạn có thể cần một tương tác từ người dùng để bắt đầu phát nhạc.
+                // Ví dụ, nếu người dùng nhấp vào nút nào đó, bạn có thể thử:
+                // document.getElementById('someUserInteractionButton').addEventListener('click', () => {
+                //     if (audioPlayer.paused) {
+                //         audioPlayer.play().catch(e => console.error("Lỗi khi phát nhạc:", e));
+                //     }
+                // });
+            }
+        });
+    </script>
+</body>
+</html>

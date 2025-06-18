@@ -1,0 +1,883 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00ffff;
+            border-radius: 50%;
+            animation: float 8s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0px); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) translateX(100px); opacity: 0; }
+        }
+
+        /* Header/Navigation */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 50%; /* canh giữa theo chiều ngang */
+            transform: translateX(-50%); /* dịch sang trái một nửa chiều rộng */
+    
+            width: 90%;
+            background: rgba(54, 54, 54, 0.7);
+            backdrop-filter: blur(12px);
+            border-bottom: none;
+            border-radius: 70px;
+            box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00ffff, #ff00ff);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Changed to Discord Login button */
+        .discord-nav-btn {
+            background: #e782c9;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none; /* Add border: none; for button-like behavior */
+            cursor: pointer; /* Add cursor: pointer; */
+        }
+
+        .discord-nav-btn:hover {
+            background: #4752c4;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.4);
+        }
+        .discord-button-logo {
+            width: 20px;   /* Điều chỉnh kích thước logo theo ý muốn */
+            height: 20px;  /* Đảm bảo chiều cao tương ứng với chiều rộng để giữ tỷ lệ */
+            object-fit: contain; /* Đảm bảo hình ảnh vừa vặn mà không bị biến dạng */
+            /* Nếu bạn không dùng flexbox cho button, có thể dùng: vertical-align: middle; */
+        }
+        
+        /* Mobile menu toggle */
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: #00ffff;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+
+    /* THAY ĐỔI ĐỂ CÓ BACKGROUND HÌNH ẢNH */
+    background:
+        linear-gradient(135deg, rgba(10, 10, 10, 0.8) 0%, rgba(26, 26, 46, 0.8) 50%, rgba(22, 33, 62, 0.8) 100%), /* Lớp phủ gradient làm mờ hình ảnh và giữ màu sắc hiện tại */
+        url('https://media.discordapp.net/attachments/1207890745684656160/1337426604061757581/Konachan.com_-_385565_bed_black_hair_blush_bow_breasts_building_city_cleavage_dema_hmw_garter_halo_long_hair_navel_no_bra_panties_rain_red_eyes_ribbons_underwear_water.jpg?ex=685372d6&is=68522156&hm=366aa739b1a177c4c7a2953a7c0774bdccf5c0b5f19fbb79ff96fb628aeb8052&=&format=webp&width=1446&height=826') center center / cover no-repeat fixed; /* Hình ảnh nền */
+    /* Hoặc dùng background-image riêng nếu bạn muốn tách rõ ràng: */
+    /* background-image: url('image.webp-9f724ae3-5fba-4b0e-a49f-88b6f8dc057d');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; */ /* Giữ hình ảnh cố định khi cuộn */
+
+    /* Nếu bạn muốn hiệu ứng mờ (backdrop-filter) cho hero, có thể cân nhắc thêm vào đây nếu cần */
+    /* backdrop-filter: blur(5px); */
+}
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        .hero h1 {
+            font-family: 'Inter', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px #00ffff); }
+            to { filter: drop-shadow(0 0 30px #ff00ff); }
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #cccccc;
+            font-weight: 400;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            color: #000;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 1.1rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 0;
+            background: #111111;
+            position: relative;
+            z-index: 10;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00ffff, transparent);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: #00ffff;
+            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        .feature-card h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .feature-card p {
+            color: #cccccc;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            position: relative;
+            z-index: 10;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .pricing-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .pricing-card.popular {
+            border: 2px solid #00ffff;
+            transform: scale(1.05);
+        }
+
+        .pricing-card.popular::after {
+            content: 'PHỔ BIẾN NHẤT';
+            position: absolute;
+            top: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            color: #000;
+            padding: 0.5rem 2rem;
+            border-radius: 0 0 10px 10px;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            border-color: #00ffff;
+            box-shadow: 0 30px 60px rgba(0, 255, 255, 0.3);
+        }
+
+        .pricing-card.popular:hover {
+            transform: translateY(-10px) scale(1.05);
+        }
+
+        .plan-name {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #00ffff;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .plan-price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-price span {
+            font-size: 1rem;
+            color: #888;
+            font-weight: 400;
+        }
+
+        .plan-description {
+            color: #cccccc;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .plan-features li {
+            padding: 0.5rem 0;
+            color: #cccccc;
+            position: relative;
+            padding-left: 2rem;
+            font-weight: 400;
+        }
+
+        .plan-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #00ffff;
+            font-weight: bold;
+        }
+
+        .plan-button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            color: #000;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plan-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.5);
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 6rem 0;
+            background: #111111;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .contact-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        .contact p {
+            font-size: 1.2rem;
+            color: #cccccc;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { 
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(0, 0, 0, 0.95);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1rem;
+            }
+            .nav-links.active { display: flex; }
+            .mobile-menu { display: flex; }
+            .pricing-card.popular { transform: none; }
+            .pricing-card.popular:hover { transform: translateY(-10px); }
+            .features-grid, .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            .nav-container {
+                padding: 0 1rem;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            border-radius: 10px;
+        }
+
+        /* Loading animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Payment Modal Styling */
+        .payment-modal, .success-modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 2000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.8); /* Black w/ opacity */
+            backdrop-filter: blur(8px); /* Blur effect */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .payment-modal-content, .success-modal-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            margin: auto;
+            padding: 40px;
+            border: 1px solid #00ffff;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0, 255, 255, 0.4);
+            animation: fadeInScale 0.3s ease-out;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .payment-modal-content h2, .success-modal-content h2 {
+            font-size: 2rem;
+            color: #00ffff;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 15px #00ffff;
+        }
+
+        .payment-modal-content p, .success-modal-content p {
+            color: #cccccc;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .close-button {
+            color: #ccc;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #00ffff;
+            text-decoration: none;
+        }
+
+        .qr-code-container {
+            background: #ffffff; /* White background for QR code */
+            padding: 15px;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 1.5rem 0;
+            box-shadow: 0 5px 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .qr-code-image {
+            width: 180px;
+            height: 180px;
+            display: block;
+        }
+
+        .payment-details {
+            text-align: left;
+            margin: 1.5rem 0;
+            padding: 0 20px;
+            border-top: 1px dashed #333;
+            padding-top: 1.5rem;
+        }
+
+        .payment-details p {
+            margin-bottom: 0.7rem;
+            font-size: 1rem;
+            color: #e0e0e0;
+        }
+
+        .payment-details strong {
+            color: #00ffff;
+        }
+
+        .payment-details span {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: #ff00ff;
+        }
+
+        .small-text {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 1rem;
+        }
+
+        .join-discord-button {
+            background: #f18ae0;
+            color: white;
+            padding: 0.8rem 1.8rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .join-discord-button:hover {
+            background: #f18ae0;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.4);
+        }
+
+        /* New styles for payment countdown */
+        #paymentCountdown {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffff00; /* Yellowish for warning/timer */
+            margin-top: 1rem;
+        }
+
+        /* Success Modal Specific Styles */
+        .success-modal-content {
+            border: 1px solid #00ff00; /* Green border for success */
+            box-shadow: 0 15px 40px rgba(0, 255, 0, 0.4);
+        }
+
+        .success-modal-content h2 {
+            color: #00ff00; /* Green text for success */
+            text-shadow: 0 0 15px #00ff00;
+        }
+
+        .server-id-input {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 1px solid #555;
+            background-color: #222;
+            color: #eee;
+            font-size: 1rem;
+        }
+
+        .submit-server-id-button {
+            background: linear-gradient(45deg, #00ff00, #00bb00);
+            color: #000;
+            padding: 0.8rem 1.8rem;
+            border-radius: 25px;
+            border: none;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-server-id-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 0, 0.4);
+        }
+
+        /* Responsive adjustments for modal */
+        @media (max-width: 500px) {
+            .payment-modal-content, .success-modal-content {
+                padding: 25px;
+                width: 95%;
+            }
+            .payment-modal-content h2, .success-modal-content h2 {
+                font-size: 1.6rem;
+            }
+            .qr-code-image {
+                width: 150px;
+                height: 150px;
+            }
+        }
+        /* Thêm vào cuối file style.css của bạn */
+
+/* Styles for the logged-in user display container */
+.user-info-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between avatar, username, and logout button */
+    background: linear-gradient(45deg, #f18ae0, #f18ae0); /* Discord-like gradient */
+    padding: 8px 15px;
+    border-radius: 25px;
+    font-weight: 600;
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    cursor: default; /* Not clickable as a whole */
+}
+
+.user-info-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.discord-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid #ffffff; /* White border around avatar */
+    object-fit: cover;
+}
+
+.username-text {
+    white-space: nowrap; /* Prevent username from wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add ellipsis if name is too long */
+    max-width: 120px; /* Limit width to prevent overflow */
+}
+
+/* Styles for the logout button */
+.logout-btn {
+    background-color: #f04747; /* Discord red */
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.logout-btn:hover {
+    background-color: #cc3c3c;
+    transform: scale(1.05);
+}
+
+/* Ensure the original discord-nav-btn also looks good */
+.discord-nav-btn {
+    background: linear-gradient(45deg, #7289da, #5f6fb8); /* Discord color */
+    color: #fff;
+    padding: 0.8rem 1.8rem;
+    border-radius: 25px;
+    border: none;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex; /* To center icon and text */
+    align-items: center;
+    gap: 8px;
+}
+
+.discord-nav-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.discord-nav-btn span {
+    font-size: 1.2em; /* Icon size */
+}
+
+/* Responsive adjustments for mobile menu */
+@media (max-width: 768px) {
+    .nav-links li:last-child { /* Targets the last list item where user info or login button resides */
+        margin-top: 15px; /* Add some space above it in mobile view */
+        justify-content: center; /* Center content in mobile menu */
+    }
+    .user-info-container, .discord-nav-btn {
+        width: fit-content; /* Adjust width for better mobile display */
+        margin: 0 auto; /* Center in mobile menu */
+    }
+}
+.logo.custom-logo {
+    background-image: url('https://media.discordapp.net/attachments/1207890745684656160/1337426604401623142/ISIMG-811264.png?ex=685372d6&is=68522156&hm=38e65ddf417331fd9c18d08679009d806ccdbb20163de22977a0362a286c0e23&=&format=webp&quality=lossless'); /* Thay thế bằng đường dẫn hình ảnh */
+    background-size: contain; /* Đảm bảo hình ảnh vừa vặn trong div */
+    background-repeat: no-repeat; /* Không lặp lại hình ảnh */
+    background-position: center; /* Căn giữa hình ảnh */
+    width: 150px; /* Đặt chiều rộng cụ thể cho div */
+    height: 50px; /* Đặt chiều cao cụ thể cho div */
+    text-indent: -9999px; /* Ẩn văn bản "⚡ MXT" nếu bạn vẫn muốn giữ nó cho SEO nhưng không hiển thị */
+    overflow: hidden; /* Đảm bảo văn bản ẩn không bị tràn ra */
+    /* Hoặc chỉ đơn giản là không để văn bản trong HTML */
+}
+
+
+/* HTML: <div class="logo"><span class="custom-icon"></span> MXD</div> */
+/* CSS: */
+/* .logo { display: flex; align-items: center; } */
+/* .custom-icon {
+    background-image: url('đường_dẫn_đến_logo_của_bạn.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 30px; 
+    height: 30px; 
+    display: inline-block;
+    margin-right: 5px; // Khoảng cách giữa icon và chữ
+} */
+ .footer {
+    background: linear-gradient(90deg, #1a1a2e, #0a0a0a); /* Màu nền footer */
+    color: #eee;
+    padding: 3rem 2rem;
+    text-align: center; /* Đây là dòng quan trọng để căn giữa văn bản inline */
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto; /* Đây là dòng quan trọng để căn giữa block element */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Điều này căn giữa các item con trong flex container theo chiều ngang */
+    gap: 1.5rem;
+}
+
+.footer-content p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: linear-gradient(90deg, #cacad6, #e7488a);
+}
+
+.footer-links {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center; /* Điều này căn giữa các item con trong footer-links */
+}

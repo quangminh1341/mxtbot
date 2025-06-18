@@ -323,7 +323,7 @@ function showDiscordLoginSection() {
     if(joinDiscordBtn) {
         joinDiscordBtn.style.display = 'inline-flex';
         joinDiscordBtn.textContent = 'Đăng nhập';
-        joinDiscordBtn.onclick = joinDiscordServer;
+        joinDiscordBtn.onclick = loginWithDiscord;
     }
     document.getElementById('paymentCountdown').style.display = 'none';
 }

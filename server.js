@@ -95,6 +95,20 @@ app.get('/auth/discord/callback', async (req, res) => {
     }
 });
 
+app.get('/api/discord-auth-url', (req, res) => {
+    const DISCORD_SCOPES = 'identify email'; // Đảm bảo scope khớp với những gì bạn muốn
+    const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(DISCORD_REDIRECT_URI)}&response_type=code&scope=${encodeURIComponent(DISCORD_SCOPES)}`;
+    res.json({ authUrl: authUrl });
+});
+
+// --- Discord OAuth2 Callback Endpoint (Đã có, giữ nguyên) ---
+app.get('/auth/discord/callback', async (req, res) => {
+    // ... (code xử lý callback như bạn đã có)
+    // Dòng này rất quan trọng: body: new URLSearchParams({ ... redirect_uri: DISCORD_REDIRECT_URI ...})
+    // Đảm bảo DISCORD_REDIRECT_URI ở đây là biến môi trường của server.
+    // ...
+});
+
 // --- API để tạo mã QR Code (ĐÃ SỬA: Tạo URL trực tiếp thay vì gọi API generate) ---
 app.post('/api/get-qr-code', async (req, res) => {
     const { purpose, amount, addInfo, userId, planName } = req.body;

@@ -95,20 +95,19 @@ function logoutDiscord() {
 }
 
 // Function for Login with Discord (from modal button and updated navbar button)
-async function loginWithDiscord() { // Thêm 'async' vào đây
-    // Save current selected plan into localStorage as pending (only for redirect scenario)
+async function loginWithDiscord() { // Đảm bảo cái này là async
     if (currentPaymentData.planName && currentPaymentData.amount) {
-        localStorage.setItem('pendingPlanName', currentPaymentData.planName); 
+        localStorage.setItem('pendingPlanName', currentPaymentData.planName);
         localStorage.setItem('pendingPlanPrice', currentPaymentData.amount.toString());
     }
 
     try {
-        // Lấy URL xác thực từ server
-        const response = await fetch('/api/discord-auth-url'); // <-- Gọi endpoint API mới của server
+        // Lấy URL auth từ server của bạn
+        const response = await fetch('/api/discord-auth-url'); // CUỘC GỌI NÀY PHẢI ĐƯỢC THỰC HIỆN
         const data = await response.json();
         const discordAuthUrl = data.authUrl;
 
-        // Chuyển hướng người dùng đến URL này
+        // Chuyển hướng người dùng
         window.location.href = discordAuthUrl;
     } catch (error) {
         console.error('Lỗi khi lấy URL xác thực Discord từ server:', error);

@@ -38,7 +38,7 @@ const SEPAY_CHECK_PAYMENT_URL = `https://my.sepay.vn/userapi/transactions/list?a
 
 
 // --- Discord OAuth2 Endpoints ---
-app.get('/auth/discord/callback', async (req, res) => {
+app.get('/callback', async (req, res) => {
     const code = req.query.code;
 
     if (!code) {

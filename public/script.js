@@ -1,6 +1,6 @@
 // --- Discord OAuth2 Configuration (Updated with your .env values) ---
 const DISCORD_CLIENT_ID = '1296801121146241085';
-const DISCORD_REDIRECT_URI = 'http://localhost:3000/auth/discord/callback';
+const DISCORD_REDIRECT_URI = 'https://websie.onrender.com/auth/discord/callback';
 const DISCORD_SCOPES = 'identify email'; // Bổ sung scope 'email' nếu muốn lấy email
 const DISCORD_AUTH_URL = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(DISCORD_REDIRECT_URI)}&response_type=code&scope=${DISCORD_SCOPES}`;
 const DISCORD_SERVER_INVITE_URL = 'YOUR_DISCORD_SERVER_INVITE_LINK'; // <<<<<<< CHÚ Ý: CẬP NHẬT LINK NÀY VỚI LINK MỜI SERVER CỦA BẠN!

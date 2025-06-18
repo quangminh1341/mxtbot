@@ -19,7 +19,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Lấy các biến môi trường
 const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID;
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
-const DISCORD_REDIRECT_URI = process.env.DISCORD_REDIRECT_URI;
+const DISCORD_REDIRECT_URI = process.env.DISCORD_REDIRECT_URI; // CÁI NÀY!
+const DISCORD_SCOPES = 'identify email';
 const DISCORD_WEBHOOK_URL_PAYMENT = process.env.DISCORD_WEBHOOK_URL_PAYMENT;
 const DISCORD_WEBHOOK_URL_UPGRADE = process.env.DISCORD_WEBHOOK_URL_UPGRADE;
 

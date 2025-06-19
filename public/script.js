@@ -530,6 +530,49 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    const mouseHeartContainer = document.createElement('div');
+    mouseHeartContainer.classList.add('mouse-heart-container');
+    document.body.appendChild(mouseHeartContainer);
+
+    // Sử dụng biến để kiểm soát tần suất tạo trái tim
+    let lastHeartTime = 0;
+    const HEART_SPAWN_INTERVAL = 50; // Tạo trái tim mỗi 50ms (điều chỉnh để thay đổi mật độ)
+
+    document.addEventListener('mousemove', (e) => {
+        const currentTime = Date.now();
+
+        // Kiểm tra để tránh tạo quá nhiều trái tim cùng lúc
+        if (currentTime - lastHeartTime < HEART_SPAWN_INTERVAL) {
+            return;
+        }
+        lastHeartTime = currentTime;
+
+        const heart = document.createElement('div');
+        heart.classList.add('mouse-flying-heart');
+
+        // Đặt vị trí ban đầu của trái tim tại con trỏ chuột
+        heart.style.left = `${e.clientX}px`;
+        heart.style.top = `${e.clientY}px`;
+
+        // Randomize direction, rotation, and size
+        const directionX = (Math.random() - 0.5) * 150; // -75px to 75px
+        const directionY = (Math.random() - 0.5) * 150 - 50; // -125px to 25px (hướng bay chủ yếu lên trên)
+        const rotation = (Math.random() - 0.5) * 360; // -180deg to 180deg
+
+        heart.style.setProperty('--dx', `${directionX}px`);
+        heart.style.setProperty('--dy', `${directionY}px`);
+        heart.style.setProperty('--rotate', `${rotation}deg`);
+
+        mouseHeartContainer.appendChild(heart);
+
+        // Remove the heart after its animation completes to clean up DOM
+        heart.addEventListener('animationend', () => {
+            heart.remove();
+        });
+    });
+});
+
 function toggleMobileMenu() {
     const navLinks = document.getElementById('navLinks');
     navLinks.classList.toggle('active');

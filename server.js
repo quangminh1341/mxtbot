@@ -15,26 +15,22 @@ const __dirname = path.dirname(__filename);
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Lấy các biến môi trường
 const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID;
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
 const DISCORD_REDIRECT_URI = process.env.DISCORD_REDIRECT_URI;
-const DISCORD_SCOPES = 'identify email'; // Biến này có thể được định nghĩa một lần
+const DISCORD_SCOPES = 'identify email'; 
 const DISCORD_WEBHOOK_URL_PAYMENT = process.env.DISCORD_WEBHOOK_URL_PAYMENT;
 const DISCORD_WEBHOOK_URL_UPGRADE = process.env.DISCORD_WEBHOOK_URL_UPGRADE;
 
-// VietQR config
 const VIETQR_BANK_ID = process.env.VIETQR_BANK_ID;
 const VIETQR_ACCOUNT_NUMBER = process.env.VIETQR_ACCOUNT_NUMBER;
 const VIETQR_ACCOUNT_NAME = process.env.VIETQR_ACCOUNT_NAME;
 const VIETQR_TEMPLATE_ID = process.env.VIETQR_TEMPLATE_ID;
 
-// Sepay.vn config
 const SEPAY_API_TOKEN = process.env.SEPAY_API_TOKEN;
-const SEPAY_ACCOUNT_NUMBER = process.env.SEPAY_ACCOUNT_NUMBER || '0336681304'; // Nên lấy từ .env, nếu không có thì dùng mặc định
-const SEPAY_CHECK_PAYMENT_URL = `https://my.sepay.vn/userapi/transactions/list?account_number=${SEPAY_ACCOUNT_NUMBER}&limit=10`; // Tăng limit để quét nhiều hơn
+const SEPAY_ACCOUNT_NUMBER = process.env.SEPAY_ACCOUNT_NUMBER;
+const SEPAY_CHECK_PAYMENT_URL = `https://my.sepay.vn/userapi/transactions/list?account_number=${SEPAY_ACCOUNT_NUMBER}&limit=10`; 
 
-// --- Hàm chung để gửi Discord Webhook ---
 async function sendDiscordWebhook(webhookUrl, embedData = null, content = null) {
     if (!webhookUrl || !webhookUrl.startsWith('https://discord.com/api/webhooks')) {
         console.warn('Server: Webhook URL chưa được cấu hình hợp lệ hoặc không phải Discord Webhook URL. Không thể gửi webhook.');
@@ -45,12 +41,9 @@ async function sendDiscordWebhook(webhookUrl, embedData = null, content = null) 
     if (content) {
         payload.content = content;
     }
-    // Chỉ thêm embeds nếu có embedData hợp lệ
     if (embedData && typeof embedData === 'object' && Object.keys(embedData).length > 0) {
         payload.embeds = [embedData];
     }
-
-    // Nếu không có cả content và embeds, không gửi webhook
     if (!payload.content && (!payload.embeds || payload.embeds.length === 0)) {
         console.warn('Server: Payload webhook trống rỗng (không có content hoặc embed). Không gửi.');
         return { success: false, message: 'Payload webhook trống.' };
@@ -79,7 +72,6 @@ async function sendDiscordWebhook(webhookUrl, embedData = null, content = null) 
     }
 }
 
-// --- Discord OAuth2 Endpoints ---
 app.get('/auth/discord/callback', async (req, res) => {
     const code = req.query.code;
 
@@ -99,7 +91,7 @@ app.get('/auth/discord/callback', async (req, res) => {
                 client_secret: DISCORD_CLIENT_SECRET,
                 grant_type: 'authorization_code',
                 code: code,
-                redirect_uri: DISCORD_REDIRECT_URI, // Đảm bảo đúng biến môi trường
+                redirect_uri: DISCORD_REDIRECT_URI,
                 scope: DISCORD_SCOPES
             }),
         });
@@ -139,10 +131,6 @@ app.get('/api/discord-auth-url', (req, res) => {
     const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(DISCORD_REDIRECT_URI)}&response_type=code&scope=${encodeURIComponent(DISCORD_SCOPES)}`;
     res.json({ authUrl: authUrl });
 });
-
----
-
-// --- API để tạo mã QR Code ---
 
 app.post('/api/get-qr-code', async (req, res) => {
     const { purpose, amount, addInfo, userId, planName } = req.body;
@@ -193,12 +181,8 @@ app.post('/api/get-qr-code', async (req, res) => {
     }
 });
 
----
-
-### API để kiểm tra thanh toán với Sepay.vn
-
 app.post('/api/check-payment', async (req, res) => {
-    const { amount, transactionCode, discordUserData, planName } = req.body; // Thêm discordUserData và planName
+    const { amount, transactionCode, discordUserData, planName } = req.body;
 
     if (!amount || !transactionCode) {
         return res.status(400).json({ success: false, message: 'Số tiền và mã giao dịch là bắt buộc để kiểm tra thanh toán.' });
@@ -211,7 +195,7 @@ app.post('/api/check-payment', async (req, res) => {
     }
 
     try {
-        const senpeResponse = await fetch(SEPAY_CHECK_PAYMENT_URL, { // Sử dụng biến toàn cục
+        const senpeResponse = await fetch(SEPAY_CHECK_PAYMENT_URL, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${SEPAY_API_TOKEN}`,
@@ -242,7 +226,6 @@ app.post('/api/check-payment', async (req, res) => {
             if (foundTransaction) {
                 console.log('Server: Thanh toán đã được xác nhận thành công:', foundTransaction);
 
-                // --- GỬI WEBHOOK THANH TOÁN THÀNH CÔNG TỚI KÊNH PAYMENT LOG ---
                 let avatarUrl = '';
                 if (discordUserData && discordUserData.id && discordUserData.avatar) {
                     avatarUrl = `https://cdn.discordapp.com/avatars/${discordUserData.id}/${discordUserData.avatar}.png?size=64`;
@@ -300,10 +283,6 @@ app.post('/api/check-payment', async (req, res) => {
     }
 });
 
----
-
-### API gửi yêu cầu nâng cấp (Webhook Upgrade)
-
 app.post('/api/submit-upgrade', async (req, res) => {
     const { userId, username, email, serverId, planName, amount, transactionCode, discordUserData } = req.body;
 
@@ -318,15 +297,13 @@ app.post('/api/submit-upgrade', async (req, res) => {
         return res.status(500).json({ success: false, message: 'URL Webhook nâng cấp chưa được cấu hình trên máy chủ.' });
     }
 
-    // Xây dựng content đơn giản cho webhook Upgrade
     const upgradeContent = `Discord: <@${userId}> (${username})\nServerID: ${serverId}`;
 
     try {
-        // GỬI WEBHOOK CHỈ CÓ CONTENT ĐẾN KÊNH UPGRADE LOG
         const upgradeWebhookResult = await sendDiscordWebhook(
             DISCORD_WEBHOOK_URL_UPGRADE,
-            null, // Không gửi embedData cho webhook này
-            upgradeContent // Chỉ gửi content
+            null,
+            upgradeContent
         );
 
         if (!upgradeWebhookResult.success) {
@@ -343,27 +320,24 @@ app.post('/api/submit-upgrade', async (req, res) => {
     }
 });
 
-
-// Serve the main HTML file for all other routes
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Start the server
 app.listen(PORT, () => {
     console.log('\n==================== SERVER STARTED ====================');
     console.log(`🚀 Server is running at: http://localhost:${PORT}`);
     console.log('📢 Hãy đảm bảo các biến môi trường sau được thiết lập đúng cách:');
     console.log('- DISCORD_CLIENT_ID');
     console.log('- DISCORD_CLIENT_SECRET');
-    console.log('- DISCORD_REDIRECT_URI'); // Đã sửa tên biến
+    console.log('- DISCORD_REDIRECT_URI');
     console.log('- DISCORD_WEBHOOK_URL_UPGRADE');
     console.log('- DISCORD_WEBHOOK_URL_PAYMENT');
     console.log('- VIETQR_BANK_ID');
     console.log('- VIETQR_ACCOUNT_NUMBER');
     console.log('- VIETQR_ACCOUNT_NAME');
     console.log('- VIETQR_TEMPLATE_ID');
-    console.log('- SEPAY_API_TOKEN'); // Đã sửa tên biến
+    console.log('- SEPAY_API_TOKEN');
     console.log('- SEPAY_ACCOUNT_NUMBER');
     console.log('========================================================\n');
 });

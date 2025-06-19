@@ -1,27 +1,17 @@
-// --- Discord OAuth2 Configuration (Updated with your .env values) ---
 const DISCORD_SERVER_INVITE_URL = 'https://discord.gg/7Q8mzW4DGt'; // <<<<<<< CHÚ Ý: CẬP NHẬT LINK NÀY VỚI LINK MỜI SERVER CỦA BẠN!
 
-// --- Discord Webhook Configuration ---
-// RẤT QUAN TRỌNG: Thay thế bằng Webhook URL THẬT của bạn!
-// CÂN NHẮC: Với các ứng dụng thực tế, Webhook URL nên được lưu và gửi từ SERVER SIDE để bảo mật.
+let currentPaymentCountdownInterval; 
+let paymentTimeout;
+let paymentStartTime;
+let paymentPollingInterval;
 
-// ******************************************************************
-// Global Variables for Payment and User Info - UNIFIED APPROACH
-// These should be declared ONCE at the very top level of your script.
-// ******************************************************************
-let currentPaymentCountdownInterval; // For countdown timer display
-let paymentTimeout; // For overall payment timeout
-let paymentStartTime; // Timestamp when payment flow started
-let paymentPollingInterval; // For checking payment status with backend
-
-let discordUserData = null; // To store Discord user data (id, username, email, avatar, discriminator, global_name)
-let currentPaymentData = {    // Unified object for current payment details
+let discordUserData = null;
+let currentPaymentData = {
     planName: null,
     amount: null,
     transactionCode: null
 };
 
-// --- Utility Functions for Discord User Data ---
 
 // Load Discord user data from localStorage on script load
 function loadDiscordUserDataFromStorage() {

@@ -1,7 +1,7 @@
 const DISCORD_CLIENT_ID = '1296801121146241085';
-const DISCORD_SERVER_INVITE_URL = 'YOUR_DISCORD_SERVER_INVITE_LINK'; // Đảm bảo bạn đã điền link này
+const DISCORD_SERVER_INVITE_URL = 'YOUR_DISCORD_SERVER_INVITE_LINK';
 
-let DISCORD_AUTH_URL = ''; // Biến này sẽ được lấy từ server
+let DISCORD_AUTH_URL = '';
 
 let currentPaymentCountdownInterval;
 let paymentTimeout;
@@ -15,7 +15,6 @@ let currentPaymentData = {
     transactionCode: null
 };
 
-// --- QUẢN LÝ DỮ LIỆU NGƯỜI DÙNG DISCORD ---
 function loadDiscordUserDataFromStorage() {
     const storedData = localStorage.getItem('discordUserData');
     if (storedData) {
@@ -38,7 +37,6 @@ function updateLoginUI() {
     const discordAvatarDisplay = document.getElementById('discordAvatarDisplay');
 
     if (discordUserData) {
-        // User is logged in
         if (discordNavLoginBtnContainer) discordNavLoginBtnContainer.style.display = 'none';
         if (loggedInUserDisplay) loggedInUserDisplay.style.display = 'flex';
 
@@ -60,7 +58,6 @@ function updateLoginUI() {
 
         if (logoutNavBtn) logoutNavBtn.onclick = logoutDiscord;
     } else {
-        // User is logged out
         if (discordNavLoginBtnContainer) discordNavLoginBtnContainer.style.display = 'block';
         if (loggedInUserDisplay) loggedInUserDisplay.style.display = 'none';
     }
@@ -92,7 +89,6 @@ function joinDiscordServer() {
     window.open(DISCORD_SERVER_INVITE_URL, '_blank');
 }
 
-// --- HÀM TIỆN ÍCH CHUNG ---
 function generateRandomNumberString(length) {
     let result = '';
     const characters = '0123456789';
@@ -106,28 +102,22 @@ function generateRandomNumberString(length) {
 function generateShortTransferContent() {
     const randomNumPart = Math.floor(Math.random() * 0xFFFFFFFF);
     const randomBase36 = randomNumPart.toString(36);
-    // const timestampBase36 = Date.now().toString(36); // Không dùng biến này
     const transferContent = `Bố Minh`;
     return transferContent.toUpperCase();
 }
 
-
-// --- QUẢN LÝ MODAL THANH TOÁN ---
 async function showPaymentModal() {
     const modal = document.getElementById('paymentModal');
     modal.style.display = 'flex';
 
-    // Clear previous states
     document.getElementById('paymentStatusMessage').textContent = '';
     clearInterval(currentPaymentCountdownInterval);
     clearTimeout(paymentTimeout);
     clearInterval(paymentPollingInterval);
 
-    // Gán tên gói vào tiêu đề modal ngay lập tức
     const modalPlanNameDisplay = document.getElementById('modalPlanNameDisplay');
     if (modalPlanNameDisplay) modalPlanNameDisplay.textContent = currentPaymentData.planName;
 
-    // Xử lý gói đặc biệt "CUSTOM"
     if (currentPaymentData.planName === 'CUSTOM') {
         document.getElementById('discordLoginSection').style.display = 'none';
         document.getElementById('paymentDetailsSection').style.display = 'none';
@@ -136,10 +126,10 @@ async function showPaymentModal() {
         return;
     }
 
-    if (discordUserData) { // Nếu đã đăng nhập Discord
-        await showPaymentDetailsSection(); // Gọi async function và chờ nó hoàn thành
+    if (discordUserData) {
+        await showPaymentDetailsSection();
     } else {
-        showDiscordLoginSection(); // Nếu chưa, hiển thị phần đăng nhập Discord
+        showDiscordLoginSection();
     }
 }
 
@@ -154,7 +144,6 @@ function closePaymentModal() {
     localStorage.removeItem('pendingPlanName');
     localStorage.removeItem('pendingPlanPrice');
 
-    // Reset modal sections visibility
     document.getElementById('discordLoginSection').style.display = 'none';
     document.getElementById('paymentDetailsSection').style.display = 'none';
     document.getElementById('contactAdminMessage').style.display = 'none';
@@ -163,7 +152,7 @@ function closePaymentModal() {
 function openSuccessModal() {
     const modal = document.getElementById('successModal');
     modal.style.display = 'flex';
-    // Cập nhật thông tin trong success modal
+    
     const successPlanNameDisplay = document.getElementById('successPlanNameDisplay');
     const successPlanAmountDisplay = document.getElementById('successPlanAmountDisplay');
     const discordUsernameDisplay = document.getElementById('discordUsernameDisplay');
@@ -198,19 +187,18 @@ function showDiscordLoginSection() {
     const joinDiscordBtn = document.querySelector('#paymentModal .join-discord-button');
     if (joinDiscordBtn) {
         joinDiscordBtn.style.display = 'inline-flex';
-        joinDiscordBtn.textContent = 'Đăng nhập'; // Thay đổi text cho rõ ràng hơn
+        joinDiscordBtn.textContent = 'Đăng nhập'; 
         joinDiscordBtn.onclick = loginWithDiscord;
     }
     document.getElementById('paymentCountdown').style.display = 'none';
 }
 
-async function showPaymentDetailsSection() { // Đổi thành async function
+async function showPaymentDetailsSection() {
     document.getElementById('discordLoginSection').style.display = 'none';
     document.getElementById('paymentDetailsSection').style.display = 'block';
     document.getElementById('contactAdminMessage').style.display = 'none';
     document.getElementById('paymentCountdown').style.display = 'block';
 
-    // --- LOGIC DÀNH CHO NGƯỜI DÙNG ĐẶC BIỆT ---
     const SPECIAL_USER_ID = "389350643090980869";
     if (discordUserData && discordUserData.id === SPECIAL_USER_ID) {
         console.log(`User ${discordUserData.global_name || discordUserData.username} (${discordUserData.id}) is a special user. Bypassing actual payment.`);
@@ -228,9 +216,8 @@ async function showPaymentDetailsSection() { // Đổi thành async function
         openSuccessModal();
         alert(`Chào mừng, ${discordUserData.global_name || discordUserData.username}! Giao dịch của bạn đã được thanh toán tự động thành công.`);
 
-        // Gửi thông báo giao dịch giả lập lên server (nếu bạn muốn log)
         try {
-            const response = await fetch('/api/log-simulated-payment', { // Cần tạo endpoint này trên server
+            const response = await fetch('/api/log-simulated-payment', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -240,7 +227,7 @@ async function showPaymentDetailsSection() { // Đổi thành async function
                     amount: currentPaymentData.amount,
                     transactionCode: currentPaymentData.transactionCode,
                     isSimulated: true,
-                    discordUserData: discordUserData // Gửi toàn bộ object để server dễ xử lý
+                    discordUserData: discordUserData
                 })
             });
             const data = await response.json();
@@ -254,16 +241,14 @@ async function showPaymentDetailsSection() { // Đổi thành async function
         }
         return;
     }
-    // --- KẾT THÚC LOGIC NGƯỜI DÙNG ĐẶC BIỆT ---
 
-    // --- Logic bình thường cho các người dùng khác ---
     document.getElementById('paymentDetailsPlanName').textContent = currentPaymentData.planName;
     document.getElementById('selectedPlanAmount').textContent = currentPaymentData.amount.toLocaleString('vi-VN');
 
-    await generateVietQR(); // Bây giờ có thể dùng await vì hàm này là async
+    await generateVietQR();
     paymentStartTime = Date.now();
     startPaymentCountdownDisplay();
-    startPaymentPolling(); // Bắt đầu kiểm tra thanh toán ngay sau khi QR được tạo
+    startPaymentPolling();
 }
 
 
@@ -316,7 +301,6 @@ async function generateVietQR() {
     }
 }
 
-// --- LOGIC ĐẾM NGƯỢC THANH TOÁN ---
 function startPaymentCountdownDisplay() {
     clearInterval(currentPaymentCountdownInterval);
 
@@ -341,8 +325,6 @@ function startPaymentCountdownDisplay() {
     }, 1000);
 }
 
-
-// --- LOGIC KIỂM TRA THANH TOÁN (POLLING) ---
 async function startPaymentPolling() {
     clearInterval(paymentPollingInterval);
     clearTimeout(paymentTimeout);
@@ -376,7 +358,7 @@ async function startPaymentPolling() {
                     amount: currentPaymentData.amount,
                     userId: discordUserData ? discordUserData.id : null,
                     planName: currentPaymentData.planName,
-                    discordUserData: discordUserData // Gửi toàn bộ object người dùng Discord
+                    discordUserData: discordUserData
                 })
             });
             const data = await response.json();
@@ -405,9 +387,6 @@ async function startPaymentPolling() {
         }
     }, 5000);
 }
-
-
-// --- HÀM GỬI YÊU CẦU NÂNG CẤP LÊN SERVER ---
 const submitUpgradeButton = document.querySelector('.submit-server-id-button');
 
 async function submitUpgradeRequest() {
@@ -455,7 +434,6 @@ async function submitUpgradeRequest() {
             alert('Yêu cầu nâng cấp Premium đã được gửi thành công! Chúng tôi sẽ xử lý sớm nhất.');
             if (typeof closeSuccessModal === 'function') closeSuccessModal();
 
-            // Reset dữ liệu thanh toán hiện tại sau khi gửi thành công yêu cầu nâng cấp
             currentPaymentData = { planName: null, amount: null, transactionCode: null };
             localStorage.removeItem('pendingPlanName');
             localStorage.removeItem('pendingPlanPrice');
@@ -474,9 +452,6 @@ async function submitUpgradeRequest() {
     }
 }
 
-// --- EVENT LISTENERS VÀ THIẾT LẬP BAN ĐẦU ---
-
-// Event listener cho nút "THANH TOÁN" trên các thẻ gói
 document.querySelectorAll('.buy-button').forEach(button => {
     button.addEventListener('click', function() {
         const pricingCard = this.closest('.pricing-card');
@@ -492,7 +467,6 @@ document.querySelectorAll('.buy-button').forEach(button => {
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // Lấy Discord Auth URL từ server khi trang tải
     try {
         const response = await fetch('/api/discord-auth-url');
         const data = await response.json();
@@ -546,7 +520,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// Add event listener for when the modal is closed via the escape key
 document.addEventListener('keydown', function(event) {
     if (event.key === "Escape") {
         if (document.getElementById('paymentModal').style.display === 'flex') {
@@ -557,13 +530,11 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
-// Mobile menu toggle
 function toggleMobileMenu() {
     const navLinks = document.getElementById('navLinks');
     navLinks.classList.toggle('active');
 }
 
-// Intersection Observer for animations
 const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
@@ -577,12 +548,10 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Observe all fade-in elements
 document.querySelectorAll('.fade-in').forEach(el => {
     observer.observe(el);
 });
 
-// Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -596,45 +565,3 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         document.getElementById('navLinks').classList.remove('active');
     });
 });
-
-// --- Particle Background Effect (Giữ nguyên nếu bạn đang dùng) ---
-/*
-function createParticles() {
-    const numParticles = 50;
-    const particlesContainer = document.querySelector('.particles');
-
-    if (particlesContainer) {
-        particlesContainer.innerHTML = '';
-    } else {
-        return;
-    }
-
-    for (let i = 0; i < numParticles; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-        particle.style.left = `${Math.random() * 100}vw`;
-        particle.style.top = `${Math.random() * 100}vh`;
-        particle.style.animationDelay = `${Math.random() * 5}s`;
-        particlesContainer.appendChild(particle);
-        animateParticle(particle);
-    }
-}
-
-function animateParticle(particle) {
-    const duration = 8 + Math.random() * 7;
-    const startY = Math.random() * 100;
-    const endY = startY - 100;
-    const startX = Math.random() * 100;
-    const endX = startX + (Math.random() - 0.5) * 50;
-
-    particle.style.animation = 'none';
-    void particle.offsetWidth;
-
-    particle.style.setProperty('--startY', `${startY}vh`);
-    particle.style.setProperty('--endY', `${endY}vh`);
-    particle.style.setProperty('--startX', `${startX}vw`);
-    particle.style.setProperty('--endX', `${endX}vw`);
-
-    particle.style.animation = `float ${duration}s infinite linear`;
-}
-*/

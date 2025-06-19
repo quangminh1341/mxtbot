@@ -316,16 +316,11 @@ app.post('/api/submit-upgrade', async (req, res) => {
 
     try {
         // Gửi webhook đầy đủ (thông tin nâng cấp) đến webhook DISCORD_WEBHOOK_URL_UPGRADE
-        const upgradeWebhookResult = await sendDiscordWebhook(discordWebhookUrlUpgrade, embed);
+        const upgradeWebhookResult = `Discord: <@${userId}> (${username})\nServerID: ${serverId}`;
         if (!upgradeWebhookResult.success) {
             return res.status(500).json({ success: false, message: `Lỗi khi gửi thông báo nâng cấp Discord: ${upgradeWebhookResult.message}` });
         }
         console.log('Server: Webhook thông tin nâng cấp đã gửi thành công.');
-
-// Payload chỉ gửi Server ID
-const discordWebhookPayload = {
-    content: `Server ID: ${serverId}`
-};
 
 const paymentEmbedResult = await sendDiscordWebhook(discordWebhookUrlPayment, embed);
         if (!paymentEmbedResult.success) {

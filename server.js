@@ -314,13 +314,30 @@ app.post('/api/submit-upgrade', async (req, res) => {
         }
     };
 
+        
+const upgradeContent = `Discord: <@${userId}> (${username})\nServerID: ${serverId}`;
+
     try {
-        // Gửi webhook đầy đủ (thông tin nâng cấp) đến webhook DISCORD_WEBHOOK_URL_UPGRADE
-        const upgradeWebhookResult = `Discord: <@${userId}> (${username})\nServerID: ${serverId}`;
+        // Gửi content đơn giản đến webhook UPGRADE
+        const upgradeWebhookResult = await sendDiscordWebhook(
+            discordWebhookUrlUpgrade,
+            null,
+            upgradeContent 
+        );
+
         if (!upgradeWebhookResult.success) {
+            console.error('Server: Lỗi khi gửi thông báo nâng cấp Discord (chỉ content):', upgradeWebhookResult.message);
             return res.status(500).json({ success: false, message: `Lỗi khi gửi thông báo nâng cấp Discord: ${upgradeWebhookResult.message}` });
         }
-        console.log('Server: Webhook thông tin nâng cấp đã gửi thành công.');
+        console.log('Server: Webhook thông tin nâng cấp (chỉ content) đã gửi thành công.');
+
+        res.json({ success: true, message: 'Yêu cầu nâng cấp đã được xử lý và thông báo đã được gửi thành công!' });
+
+    } catch (error) {
+        console.error('Server: Lỗi trong endpoint submit-upgrade (catch chung):', error);
+        res.status(500).json({ success: false, message: 'Lỗi máy chủ nội bộ khi xử lý yêu cầu nâng cấp.' });
+    }
+});
 
 const paymentEmbedResult = await sendDiscordWebhook(discordWebhookUrlPayment, embed);
         if (!paymentEmbedResult.success) {

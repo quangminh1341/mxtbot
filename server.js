@@ -343,7 +343,8 @@ app.post('/api/submit-upgrade', async (req, res) => {
 
     // Chuẩn bị các biến để gửi tới Botghost
     const variables = [
-        { name: "userId", variable: "{serverID}", value: serverId }
+        { name: "serverId", variable: "{serverID}", value: serverId },
+        { name: "userId", variable: "{userID}", value: userId },
     ];
 
     try {

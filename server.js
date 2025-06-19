@@ -182,7 +182,7 @@ app.post('/api/get-qr-code', async (req, res) => {
 });
 
 app.post('/api/check-payment', async (req, res) => {
-    const { amount, transactionCode, discordUserData, planName } = req.body;
+    const { amount, transactionCode, discordUserData, planName, serverId } = req.body; // THÊM serverId VÀO ĐÂY
 
     if (!amount || !transactionCode) {
         return res.status(400).json({ success: false, message: 'Số tiền và mã giao dịch là bắt buộc để kiểm tra thanh toán.' });
@@ -241,6 +241,7 @@ app.post('/api/check-payment', async (req, res) => {
                     description: `Một giao dịch mua gói dịch vụ đã được ghi nhận.`,
                     color: 65280, // Màu xanh lá cây cho thành công
                     fields: [
+                        { name: "> 🆔 Server ID", value: `**${serverId || 'N/A'}**`, inline: true },
                         { name: "> 📦 Gói", value: `**${planName || 'N/A'}**`, inline: true },
                         { name: "> 💵 Số tiền", value: `**${amount.toLocaleString('vi-VN')} VND**`, inline: true },
                         { name: "> 🔑 Mã giao dịch", value: `**${transactionCode || 'N/A'}**`, inline: true },
@@ -283,6 +284,48 @@ app.post('/api/check-payment', async (req, res) => {
     }
 });
 
+const BOTGHOST_API_KEY = process.env.BOTGHOST_API_KEY;
+// DISCORD_WEBHOOK_URL_UPGRADE sẽ được đổi tên/sử dụng cho Botghost URL trong .env
+
+// Hàm mới để gửi dữ liệu tới Botghost
+async function sendBotghostWebhook(webhookUrl, variables) {
+    if (!webhookUrl || !webhookUrl.startsWith('https://api.botghost.com/webhook/')) {
+        console.warn('Server: Botghost Webhook URL chưa được cấu hình hợp lệ hoặc không phải Botghost Webhook URL. Không thể gửi webhook.');
+        return { success: false, message: 'Botghost Webhook URL chưa cấu hình hoặc không hợp lệ.' };
+    }
+    if (!BOTGHOST_API_KEY) {
+        console.error('Server: Thiếu BOTGHOST_API_KEY trong biến môi trường.');
+        return { success: false, message: 'API Key của Botghost chưa được cấu hình.' };
+    }
+
+    const payload = {
+        variables: variables
+    };
+
+    try {
+        const response = await fetch(webhookUrl, {
+            method: 'POST',
+            headers: {
+                'Authorization': BOTGHOST_API_KEY,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (response.ok) {
+            console.log(`Server: Botghost Webhook gửi thành công đến ${webhookUrl}`);
+            const data = await response.json();
+            return { success: true, data: data };
+        } else {
+            const errorText = await response.text();
+            console.error(`Server: Lỗi khi gửi Botghost webhook đến ${webhookUrl}: ${response.status} - ${errorText}`);
+            return { success: false, message: `Lỗi Botghost Webhook: ${response.status} - ${errorText}` };
+        }
+    } catch (error) {
+        console.error(`Server: Lỗi mạng hoặc lỗi khác khi gửi Botghost webhook đến ${webhookUrl}:`, error);
+        return { success: false, message: `Lỗi máy chủ khi gửi Botghost webhook: ${error.message}` };
+    }
+}
 app.post('/api/submit-upgrade', async (req, res) => {
     const { userId, username, email, serverId, planName, amount, transactionCode, discordUserData } = req.body;
 
@@ -292,25 +335,28 @@ app.post('/api/submit-upgrade', async (req, res) => {
         return res.status(400).json({ success: false, message: 'Thiếu thông tin cần thiết để gửi yêu cầu nâng cấp.' });
     }
 
-    if (!DISCORD_WEBHOOK_URL_UPGRADE) {
-        console.error('Server: Webhook URL cho yêu cầu nâng cấp chưa được cấu hình.');
-        return res.status(500).json({ success: false, message: 'URL Webhook nâng cấp chưa được cấu hình trên máy chủ.' });
+    // DISCORD_WEBHOOK_URL_UPGRADE bây giờ sẽ chứa URL Botghost
+    if (!DISCORD_WEBHOOK_URL_UPGRADE) { 
+        console.error('Server: Webhook URL cho yêu cầu nâng cấp (Botghost) chưa được cấu hình.');
+        return res.status(500).json({ success: false, message: 'URL Botghost Webhook nâng cấp chưa được cấu hình trên máy chủ.' });
     }
 
-    const upgradeContent = `Discord: <@${userId}> (${username})\nServerID: ${serverId}`;
+    // Chuẩn bị các biến để gửi tới Botghost
+    const variables = [
+        { name: "userId", variable: "{serverID}", value: serverId }
+    ];
 
     try {
-        const upgradeWebhookResult = await sendDiscordWebhook(
-            DISCORD_WEBHOOK_URL_UPGRADE,
-            null,
-            upgradeContent
+        const upgradeWebhookResult = await sendBotghostWebhook(
+            DISCORD_WEBHOOK_URL_UPGRADE, // Sử dụng biến môi trường đã có, nhưng giá trị là Botghost URL
+            variables
         );
 
         if (!upgradeWebhookResult.success) {
-            console.error('Server: Lỗi khi gửi thông báo nâng cấp Discord (chỉ content):', upgradeWebhookResult.message);
-            return res.status(500).json({ success: false, message: `Lỗi khi gửi thông báo nâng cấp Discord: ${upgradeWebhookResult.message}` });
+            console.error('Server: Lỗi khi gửi thông báo nâng cấp đến Botghost:', upgradeWebhookResult.message);
+            return res.status(500).json({ success: false, message: `Lỗi khi gửi thông báo nâng cấp đến Botghost: ${upgradeWebhookResult.message}` });
         }
-        console.log('Server: Webhook thông tin nâng cấp (chỉ content) đã gửi thành công.');
+        console.log('Server: Webhook thông tin nâng cấp đã gửi thành công đến Botghost.');
 
         res.json({ success: true, message: 'Yêu cầu nâng cấp đã được xử lý và thông báo đã được gửi thành công!' });
 

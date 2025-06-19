@@ -1,4 +1,4 @@
- const DISCORD_SERVER_INVITE_URL = 'https://discord.gg/7Q8mzW4DGt'; // <<<<<<< CH
+const DISCORD_SERVER_INVITE_URL = 'https://discord.gg/7Q8mzW4DGt'; // <<<<<<< CH
 // --- Discord Webhook Configuration ---
 // RẤT QUAN TRỌNG: Thay thế bằng Webhook URL THẬT của bạn!
 // CÂN NHẮC: Với các ứng dụng thực tế, Webhook URL nên được lưu và gửi từ SERVER SIDE để bảo mật.
@@ -151,7 +151,7 @@ function generateShortTransferContent() {
  */
 
 async function sendPaymentWebhook(planName, planPrice, userData, isSimulated, transactionCode, serverId = null) {
-    if (!DISCORD_WEBHOOK_URL || DISCORD_WEBHOOK_URL.includes('https://discord.com/api/webhooks/1384713803777970236/kf6w0jAlc3rLt4BFyKBF0PDlQnrAdgz1-HU3Nlu6tXzH5cYQCnd_oy4aIkTVB3gJQAif')) {
+    if (!DISCORD_WEBHOOK_URL || DISCORD_WEBHOOK_URL.includes('https://discord.com/api/webhooks/1384713803777970236/kf6w0jAlc3rLt4BFyKBF0PDQnrAdgz1-HU3Nlu6tXzH5cYQCnd_oy4aIkTVB3gJQAif')) {
         console.warn('Webhook URL chưa được cấu hình. Không thể gửi webhook.');
         return;
     }

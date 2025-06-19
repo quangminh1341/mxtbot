@@ -281,7 +281,7 @@ app.post('/api/check-payment', async (req, res) => {
 
 // --- Discord Webhook Endpoint ---
 app.post('/api/submit-upgrade', async (req, res) => {
-    const { userId, username, email, serverId, planName, amount, transactionCode } = req.body;
+    const { userId, username, email, serverId, planName, amount, transactionCode, discordUserData } = req.body;
 
     // Kiểm tra dữ liệu đầu vào cơ bản
     if (!userId || !username || !serverId || !planName || !amount || !transactionCode) {
@@ -297,32 +297,57 @@ app.post('/api/submit-upgrade', async (req, res) => {
         return res.status(500).json({ success: false, message: 'URL Webhook chưa được cấu hình trên máy chủ.' });
     }
 
-    const embed = {
-        title: "PREMIUM LOGS",
-        description: `> **Người dùng:** <@${userId}> (${username})`,
-        color: 3066993, // Màu xanh dương
+    // Xây dựng embed đầy đủ cho webhook Payment
+    // (Lưu ý: avatarUrl và discordUserData cần được truyền từ frontend hoặc xử lý tương tự như check-payment)
+    let avatarUrl = '';
+    if (discordUserData && discordUserData.id && discordUserData.avatar) {
+        avatarUrl = `https://cdn.discordapp.com/avatars/${discordUserData.id}/${discordUserData.avatar}.png?size=64`;
+    } else {
+        const defaultAvatarIndex = (discordUserData && (discordUserData.discriminator === '0' || !discordUserData.discriminator))
+            ? (discordUserData.id ? parseInt(discordUserData.id.slice(-5)) % 5 : 0)
+            : (discordUserData ? parseInt(discordUserData.discriminator) % 5 : 0);
+        avatarUrl = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarIndex}.png?size=64`;
+    }
+
+    const paymentEmbed = { // Đổi tên biến để rõ ràng hơn là cho Payment
+        title: "💰 Giao dịch Mua gói Đã xử lý (Premium)", // Đổi tên title cho phù hợp với payment
+        description: `Một giao dịch mua gói Premium đã được ghi nhận.`,
+        color: 65280, // Màu xanh lá cây cho giao dịch thành công (nếu đây là xác nhận thanh toán)
         fields: [
-            { name: "> Server ID", value: `**${serverId}**`, inline: false },
-            { name: "> Gói Premium", value: `**${planName}**`, inline: true },
-            { name: "> Số tiền", value: `**${amount} VND**`, inline: true },
-            { name: "> Mã giao dịch", value: `**${transactionCode}**`, inline: false },
-            { name: "> Email", value: `**${email || "Không cung cấp"}**`, inline: false }
+            { name: "📦 Gói", value: planName, inline: true },
+            { name: "💵 Số tiền", value: `${amount.toLocaleString('vi-VN')} VND`, inline: true },
+            { name: "🔑 Mã giao dịch", value: transactionCode, inline: true },
+            { name: "👤 Người dùng", value: discordUserData ? `${discordUserData.global_name || discordUserData.username}${discordUserData.discriminator === '0' || !discordUserData.discriminator ? '' : `#${discordUserData.discriminator}`} (ID: \`${discordUserData.id}\`)` : `Tên người dùng: ${username} (ID: \`${userId}\`)`, inline: false },
+            { name: "✅ Trạng thái", value: "Thanh toán thành công", inline: false },
+            { name: "📧 Email", value: email || "Không cung cấp", inline: false }
         ],
+        thumbnail: {
+            url: avatarUrl
+        },
         timestamp: new Date().toISOString(),
         footer: {
-            text: "mxt Bot"
+            text: "mxt Bot - Payment Log"
         }
     };
 
-        
-const upgradeContent = `Discord: <@${userId}> (${username})\nServerID: ${serverId}`;
+    // Xây dựng content đơn giản cho webhook Upgrade
+    const upgradeContent = `Discord: <@${userId}> (${username})\nServerID: ${serverId}`;
 
     try {
-        // Gửi content đơn giản đến webhook UPGRADE
+        // GỬI WEBHOOK THỨ NHẤT (Payment): Full embed đến kênh Payment
+        const paymentWebhookResult = await sendDiscordWebhook(discordWebhookUrlPayment, paymentEmbed);
+        if (!paymentWebhookResult.success) {
+            console.error('Server: Lỗi khi gửi Discord Webhook (Embed to Payment URL):', paymentWebhookResult.message);
+            // return res.status(500).json({ success: false, message: `Lỗi khi gửi thông báo thanh toán Discord: ${paymentWebhookResult.message}` });
+        } else {
+            console.log('Server: Webhook chứa embed đã gửi thành công đến Payment URL.');
+        }
+
+        // GỬI WEBHOOK THỨ HAI (Upgrade): Chỉ content đến kênh Upgrade
         const upgradeWebhookResult = await sendDiscordWebhook(
             discordWebhookUrlUpgrade,
-            null,
-            upgradeContent 
+            null, // Không gửi embedData cho webhook này
+            upgradeContent // Chỉ gửi content
         );
 
         if (!upgradeWebhookResult.success) {
@@ -331,35 +356,12 @@ const upgradeContent = `Discord: <@${userId}> (${username})\nServerID: ${serverI
         }
         console.log('Server: Webhook thông tin nâng cấp (chỉ content) đã gửi thành công.');
 
-        res.json({ success: true, message: 'Yêu cầu nâng cấp đã được xử lý và thông báo đã được gửi thành công!' });
+        // Trả về phản hồi thành công sau khi cả hai webhook đã được gửi
+        res.json({ success: true, message: 'Yêu cầu nâng cấp và thông báo thanh toán đã được xử lý và gửi thành công!' });
 
     } catch (error) {
         console.error('Server: Lỗi trong endpoint submit-upgrade (catch chung):', error);
-        res.status(500).json({ success: false, message: 'Lỗi máy chủ nội bộ khi xử lý yêu cầu nâng cấp.' });
-    }
-});
-
-const paymentEmbedResult = await sendDiscordWebhook(discordWebhookUrlPayment, embed);
-        if (!paymentEmbedResult.success) {
-             console.error('Server: Lỗi khi gửi Discord Webhook (Embed to Payment URL):', paymentEmbedResult.message);
-             // handle error, but don't block success if it's not critical
-        }
-        console.log('Server: Webhook chứa embed đã gửi thành công đến Payment URL.');
-
-        // Gửi webhook chỉ có Server ID đến webhook DISCORD_WEBHOOK_URL_UPGRADE (theo tên bạn đặt)
-        const idOnlyResponseResult = await sendDiscordWebhook(discordWebhookUrlUpgrade, null, `Server ID: ${serverId}`);
-        if (!idOnlyResponseResult.success) {
-             console.error('Server: Lỗi khi gửi Discord Webhook (Server ID only to Upgrade URL):', idOnlyResponseResult.message);
-             // handle error
-        }
-        console.log('Server: Webhook chứa Server ID đã gửi thành công đến Upgrade URL.');
-
-
-        res.json({ success: true, message: 'Yêu cầu nâng cấp đã được xử lý và thông báo đã được gửi thành công!' });
-
-    } catch (error) {
-        console.error('Server: Lỗi trong endpoint submit-upgrade (catch chung):', error);
-        res.status(500).json({ success: false, message: 'Lỗi máy chủ nội bộ khi xử lý yêu cầu nâng cấp.' });
+        res.status(500).json({ success: false, message: 'Lỗi máy chủ nội bộ khi xử lý yêu cầu nâng cấp hoặc thanh toán.' });
     }
 });
 

@@ -1,5 +1,5 @@
 const DISCORD_SERVER_INVITE_URL = 'https://discord.gg/7Q8mzW4DGt'; // <<<<<<< CHÚ Ý: CẬP NHẬT LINK NÀY VỚI LINK MỜI SERVER CỦA BẠN!
-const DISCORD_WEBHOOK_URL = 
+const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL_PAYMENT;
 
 let currentPaymentCountdownInterval; 
 let paymentTimeout;

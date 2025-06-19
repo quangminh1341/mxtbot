@@ -92,7 +92,7 @@
         <div class="container">
             <h2 class="section-title">LỰA CHỌN PREMIUM</h2>
             <div class="pricing-grid">
-                <div class="pricing-card fade-in" data-plan="Temp Voice" data-price="10000">
+                <div class="pricing-card fade-in" data-plan="Temp Voice" data-price="30000">
                     <h3 class="plan-name">TEMP VOICE</h3>
                     <div class="plan-price">30k<span>/tháng</span></div>
                     <p class="plan-description">Hoàn hảo cho cộng đồng nhỏ</p>
@@ -206,27 +206,5 @@
 </div>
 
     <script src="script.js"></script>
-    <!-- THÊM ĐOẠN MÃ JAVASCRIPT ĐỂ CHỈNH ÂM LƯỢNG NGAY SAU script.js -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const audioPlayer = document.getElementById('backgroundMusic');
-            
-            if (audioPlayer) {
-                // ĐIỀU CHỈNH ÂM LƯỢNG Ở ĐÂY
-                // Giá trị từ 0.0 (tắt tiếng) đến 1.0 (âm lượng tối đa)
-                audioPlayer.volume = 0.3; // Ví dụ: đặt âm lượng là 30%
-
-                // LƯU Ý VỀ AUTOPLAY:
-                // Do hạn chế của trình duyệt, nếu nhạc không tự động phát,
-                // bạn có thể cần một tương tác từ người dùng để bắt đầu phát nhạc.
-                // Ví dụ, nếu người dùng nhấp vào nút nào đó, bạn có thể thử:
-                // document.getElementById('someUserInteractionButton').addEventListener('click', () => {
-                //     if (audioPlayer.paused) {
-                //         audioPlayer.play().catch(e => console.error("Lỗi khi phát nhạc:", e));
-                //     }
-                // });
-            }
-        });
-    </script>
 </body>
 </html>

@@ -142,7 +142,7 @@ app.get('/api/discord-auth-url', (req, res) => {
 
 ---
 
-### API để tạo mã QR Code
+// --- API để tạo mã QR Code ---
 
 app.post('/api/get-qr-code', async (req, res) => {
     const { purpose, amount, addInfo, userId, planName } = req.body;

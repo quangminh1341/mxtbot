@@ -9,7 +9,11 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const __filename = fileURLToPack(__dirname, 'public'));
+const __filename = fileURLToPath(import.meta.url); 
+const __dirname = path.dirname(__filename);  
+
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Lấy các biến môi trường
 const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID;

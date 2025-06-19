@@ -297,15 +297,7 @@ app.post('/api/submit-upgrade', async (req, res) => {
         return res.status(500).json({ success: false, message: 'URL Webhook nâng cấp chưa được cấu hình trên máy chủ.' });
     }
 
-    const upgradeContent = {
-    variables: [
-            {
-                name: "message",
-                variable: "{message}",
-                value: `${serverId}`
-            },
-        ]
-    };
+    const upgradeContent = `Discord: <@${userId}> (${username})\nServerID: ${serverId}`;
 
     try {
         const upgradeWebhookResult = await sendDiscordWebhook(

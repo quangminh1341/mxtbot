@@ -130,8 +130,8 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            border: none; /* Add border: none; for button-like behavior */
-            cursor: pointer; /* Add cursor: pointer; */
+            border: none;
+            cursor: pointer;
         }
 
         .discord-nav-btn:hover {
@@ -140,10 +140,9 @@
             box-shadow: 0 8px 25px rgba(88, 101, 242, 0.4);
         }
         .discord-button-logo {
-            width: 20px;   /* Điều chỉnh kích thước logo theo ý muốn */
-            height: 20px;  /* Đảm bảo chiều cao tương ứng với chiều rộng để giữ tỷ lệ */
-            object-fit: contain; /* Đảm bảo hình ảnh vừa vặn mà không bị biến dạng */
-            /* Nếu bạn không dùng flexbox cho button, có thể dùng: vertical-align: middle; */
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
         }
         
         /* Mobile menu toggle */
@@ -171,19 +170,10 @@
     position: relative;
     z-index: 10;
 
-    /* THAY ĐỔI ĐỂ CÓ BACKGROUND HÌNH ẢNH */
     background:
         linear-gradient(135deg, rgba(10, 10, 10, 0.8) 0%, rgba(26, 26, 46, 0.8) 50%, rgba(22, 33, 62, 0.8) 100%), /* Lớp phủ gradient làm mờ hình ảnh và giữ màu sắc hiện tại */
-        url('https://media.discordapp.net/attachments/1207890745684656160/1337426604061757581/Konachan.com_-_385565_bed_black_hair_blush_bow_breasts_building_city_cleavage_dema_hmw_garter_halo_long_hair_navel_no_bra_panties_rain_red_eyes_ribbons_underwear_water.jpg?ex=685372d6&is=68522156&hm=366aa739b1a177c4c7a2953a7c0774bdccf5c0b5f19fbb79ff96fb628aeb8052&=&format=webp&width=1446&height=826') center center / cover no-repeat fixed; /* Hình ảnh nền */
-    /* Hoặc dùng background-image riêng nếu bạn muốn tách rõ ràng: */
-    /* background-image: url('image.webp-9f724ae3-5fba-4b0e-a49f-88b6f8dc057d');
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-attachment: fixed; */ /* Giữ hình ảnh cố định khi cuộn */
+        url('https://cdn.discordapp.com/attachments/1207890745684656160/1337426604061757581/Konachan.com_-_385565_bed_black_hair_blush_bow_breasts_building_city_cleavage_dema_hmw_garter_halo_long_hair_navel_no_bra_panties_rain_red_eyes_ribbons_underwear_water.jpg?ex=6854c456&is=685372d6&hm=a1306446a1442e53d1e42233ebdc64ab7e6259b0e46cdc8a417152e089129f66&') center center / cover no-repeat fixed; /* Hình ảnh nền */
 
-    /* Nếu bạn muốn hiệu ứng mờ (backdrop-filter) cho hero, có thể cân nhắc thêm vào đây nếu cần */
-    /* backdrop-filter: blur(5px); */
 }
 
         .hero-content {
@@ -832,7 +822,7 @@
     }
 }
 .logo.custom-logo {
-    background-image: url('https://media.discordapp.net/attachments/1207890745684656160/1337426604401623142/ISIMG-811264.png?ex=685372d6&is=68522156&hm=38e65ddf417331fd9c18d08679009d806ccdbb20163de22977a0362a286c0e23&=&format=webp&quality=lossless'); /* Thay thế bằng đường dẫn hình ảnh */
+    background-image: url('https://cdn.discordapp.com/attachments/1207890745684656160/1337426604401623142/ISIMG-811264.png?ex=6854c456&is=685372d6&hm=05a0fbc78ce15dd2f199539a6e101ff5156c90c25f6312f45a5b2d2489095909&'); /* Thay thế bằng đường dẫn hình ảnh */
     background-size: contain; /* Đảm bảo hình ảnh vừa vặn trong div */
     background-repeat: no-repeat; /* Không lặp lại hình ảnh */
     background-position: center; /* Căn giữa hình ảnh */

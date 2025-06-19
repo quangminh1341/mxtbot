@@ -1,5 +1,4 @@
 const DISCORD_SERVER_INVITE_URL = 'https://discord.gg/7Q8mzW4DGt'; // <<<<<<< CHÚ Ý: CẬP NHẬT LINK NÀY VỚI LINK MỜI SERVER CỦA BẠN!
-const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL_PAYMENT;
 
 let currentPaymentCountdownInterval; 
 let paymentTimeout;
@@ -144,10 +143,6 @@ function generateShortTransferContent() {
  */
 
 async function sendPaymentWebhook(planName, planPrice, userData, isSimulated, transactionCode, serverId = null) {Add commentMore actions
-    if (!DISCORD_WEBHOOK_URL || DISCORD_WEBHOOK_URL.includes('https://discord.com/api/webhooks/1384713803777970236/kf6w0jAlc3rLt4BFyKBF0PDlQnrAdgz1-HU3Nlu6tXzH5cYQCnd_oy4aIkTVB3gJQAif')) {
-        console.warn('Webhook URL chưa được cấu hình. Không thể gửi webhook.');
-        return;
-    }
 
     const transactionType = isSimulated ? "Giao dịch giả lập" : "Thanh toán thành công";
     const color = isSimulated ? 16763904 : 65280; // Cam cho giả lập, Xanh lá cho thành công
@@ -161,58 +156,6 @@ async function sendPaymentWebhook(planName, planPrice, userData, isSimulated, tr
             : (userData ? parseInt(userData.discriminator) % 5 : 0); 
         avatarUrl = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarIndex}.png?size=64`;
     }
-
-    const fields = [
-        { name: "📦 Gói", value: planName, inline: true },
-        { name: "💵 Số tiền", value: `${planPrice.toLocaleString('vi-VN')} VND`, inline: true },
-        { name: "🔑 Mã giao dịch", value: transactionCode || 'N/A', inline: true },
-        { name: "👤 Người dùng", value: userData ? `${userData.global_name || userData.username}${userData.discriminator === '0' || !userData.discriminator ? '' : `#${userData.discriminator}`} (ID: \`${userData.id}\`)` : 'Không xác định', inline: false },
-        { name: "✅ Trạng thái", value: transactionType, inline: false }
-    ];
-
-    // Add Server ID field only if it's provided
-    if (serverId) {
-        fields.push({ name: "🔗 ID Máy chủ", value: `\`${serverId}\``, inline: false });
-    }
-
-    const payload = {
-        embeds: [
-            {
-                title: "💰 Giao dịch Mua gói Đã xử lý",
-                description: `Một giao dịch mua gói dịch vụ đã được ghi nhận.`,
-                color: color, 
-                fields: fields, // Use the dynamically created fields array
-                thumbnail: {
-                    url: avatarUrl 
-                },
-                timestamp: new Date().toISOString(), 
-                footer: {
-                    text: "mxt Bot"
-                }
-            }
-        ]
-    };
-
-    try {
-        const response = await fetch(DISCORD_WEBHOOK_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload),
-        });
-
-        if (response.ok) {
-            console.log('Webhook gửi thành công!');
-        } else {
-            console.error('Lỗi khi gửi webhook:', response.status, response.statusText);
-            const errorText = await response.text();
-            console.error('Webhook error response:', errorText);
-        }
-    } catch (error) {
-        console.error('Lỗi mạng hoặc lỗi khác khi gửi webhook:', error);
-    }
-}
 // --- Payment Modal Functions ---
 
 // Main function to show payment modal, now handles login state

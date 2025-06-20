@@ -1077,7 +1077,15 @@ body {
     display: block;
     margin-bottom: 8px;
     color: #070303;
+    text-shadow:
+        0 0 5px #ff6600,   /* Bóng nhỏ, màu giống chữ */
+        0 0 10px #ff6600,  /* Bóng lớn hơn, màu giống chữ */
+        0 0 15px #faf8fa,  /* Bóng lớn hơn nữa */
+        0 0 20px #FF00FF,
+        0 0 25px #FF00FF,
+        0 0 30px #FF00FF;
     font-weight: bold;
+    font-size: 17px;
 }
 
 .form-group textarea,

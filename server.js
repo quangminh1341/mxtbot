@@ -345,8 +345,52 @@ app.post('/api/submit-upgrade', async (req, res) => {
     const variables = [
         { name: "serverId", variable: "{serverID}", value: serverId },
         { name: "userId", variable: "{userID}", value: userId },
+        { name: "planName", variable: "{planName}", value: planName },
+        { name: "amount", variable: "{money}", value: amount },
+        { name: "bankcode", variable: "{bankcode}", value: transactionCode },
+        { name: "type", variable: "{type}", value: "payment" }
     ];
 
+    try {
+        const upgradeWebhookResult = await sendBotghostWebhook(
+            DISCORD_WEBHOOK_URL_UPGRADE, // Sử dụng biến môi trường đã có, nhưng giá trị là Botghost URL
+            variables
+        );
+
+        if (!upgradeWebhookResult.success) {
+            console.error('Server: Lỗi khi gửi thông báo nâng cấp đến Botghost:', upgradeWebhookResult.message);
+            return res.status(500).json({ success: false, message: `Lỗi khi gửi thông báo nâng cấp đến Botghost: ${upgradeWebhookResult.message}` });
+        }
+        console.log('Server: Webhook thông tin nâng cấp đã gửi thành công đến Botghost.');
+
+        res.json({ success: true, message: 'Yêu cầu nâng cấp đã được xử lý và thông báo đã được gửi thành công!' });
+
+    } catch (error) {
+        console.error('Server: Lỗi trong endpoint submit-upgrade (catch chung):', error);
+        res.status(500).json({ success: false, message: 'Lỗi máy chủ nội bộ khi xử lý yêu cầu nâng cấp.' });
+    }
+});
+
+app.post('/api/submit-feedback', async (req, res) => {
+    console.log('Server: Nhận được yêu cầu gửi phản hồi.');
+    const { message, userId, username, email } = req.body;
+
+    if (!message || !userId || !username) {
+        console.error('Server: Dữ liệu phản hồi thiếu (tin nhắn, userId, hoặc username).');
+        return res.status(400).json({ success: false, message: 'Dữ liệu phản hồi thiếu (tin nhắn, ID người dùng, hoặc tên người dùng).' });
+    }
+
+    if (!DISCORD_WEBHOOK_URL_UPGRADE) { 
+        console.error('Server: Webhook URL cho yêu cầu nâng cấp (Botghost) chưa được cấu hình.');
+        return res.status(500).json({ success: false, message: 'URL Botghost Webhook nâng cấp chưa được cấu hình trên máy chủ.' });
+    }
+
+    const variables = [
+        { name: "message", variable: "{feedback}", value: message },
+        { name: "userId", variable: "{userID}", value: userId },
+        { name: "type", variable: "{type}", value: "feedback" }
+    ];
+    
     try {
         const upgradeWebhookResult = await sendBotghostWebhook(
             DISCORD_WEBHOOK_URL_UPGRADE, // Sử dụng biến môi trường đã có, nhưng giá trị là Botghost URL

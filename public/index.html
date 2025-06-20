@@ -10,19 +10,18 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="logo2.png" type="image/png">
 </head>
-<body></body>
-
+<body>
     <div class="particles" id="particles"></div>
     
     <header class="header">
-    <div class="nav-container">
-        <a href="#home" class="logo custom-logo"></a> 
-        <nav>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#features">Tính Năng</a></li>
-                <li><a href="#pricing">Bảng Giá</a></li>
-                <li><a href="#contact">Liên Hệ</a></li>
-                <li><a href="https://discord.com/oauth2/authorize?client_id=1296801121146241085&permissions=8&integration_type=0&scope=bot" target="_blank">Invite Bot</a></li>
+        <div class="nav-container">
+            <a href="#home" class="logo custom-logo"></a> 
+            <nav>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#features">Tính Năng</a></li>
+                    <li><a href="#pricing">Bảng Giá</a></li>
+                    <li><a href="#contact">Liên Hệ</a></li>
+                    <li><a href="https://discord.com/oauth2/authorize?client_id=1296801121146241085&permissions=8&integration_type=0&scope=bot" target="_blank">Invite Bot</a></li>
 
                     <li id="discordNavLoginBtnContainer">
                         <button class="discord-nav-btn" onclick="loginWithDiscord()">
@@ -148,71 +147,97 @@
                 <h2>SẴN SÀNG NÂNG CẤP?</h2>
                 <p>Tham gia cộng đồng Discord của chúng tôi để được thiết lập và hỗ trợ ngay lập tức!</p>
                 <button class="join-server-btn cta-button" onclick="window.open('https://discord.gg/7Q8mzW4DGt', '_blank')">
-    <span class="fa-brands fa-discord"></span> Tham gia máy chủ
-</button>
+                    <span class="fa-brands fa-discord"></span> Tham gia máy chủ
+                </button>
             </div>
         </div>
     </section>
     
     <footer class="footer">
-    <div class="footer-content">
-        <p>&copy;2024 POWERED BY MXT NETWORK.</p>
-        <div class="footer-links">
-            <a href="privacy-policy.html" class="privacy-policy-link">Privacy Policy</a>
+        <div class="footer-content">
+            <p>&copy;2024 POWERED BY MXT NETWORK.</p>
+            <div class="footer-links">
+                <a href="privacy-policy.html" class="privacy-policy-link">Privacy Policy</a>
+            </div>
         </div>
-    </div>
-</footer>
+    </footer>
 
     <div id="paymentModal" class="payment-modal">
-    <div class="payment-modal-content">
-        <span class="close-button" onclick="closePaymentModal()">&times;</span>
-        <h2 id="paymentPlanTitle">Thanh Toán Gói <span id="modalPlanNameDisplay"></span></h2> 
-        
-        <div id="discordLoginSection" style="display: none;">
-            <p>Vui lòng đăng nhập Discord để tiếp tục thanh toán.</p>
-            <button class="join-discord-button cta-button" onclick="loginWithDiscord()">Đăng nhập Discord</button>
-            </div>
-
-        <div id="paymentDetailsSection" style="display: none;">
-            <p id="paymentIntroText">Vui lòng quét mã QR dưới đây để hoàn tất thanh toán.</p>
-            <div class="qr-code-container">
-                <img id="qrCodeImage" src="" alt="Mã QR Thanh Toán" class="qr-code-image">
-            </div>
-            <div class="payment-details">
-                <p><strong>Gói:</strong> <span id="paymentDetailsPlanName"></span></p> 
-                <p><strong>Số tiền:</strong> <span id="selectedPlanAmount"></span> VNĐ</p>
-                <p><strong>Nội dung chuyển khoản:</strong> <span id="transferContentText"></span></p> 
-                <p><strong>Chủ tài khoản:</strong> <span id="displayBankAccountName"></span></p>
-                <p><strong>Tên Ngân hàng:</strong> <span id="displayBankName"></span></p>
-                <p><strong>Số tài khoản:</strong> <span id="bankAccountNumber"></span></p>
-                <p class="small-text" id="paymentInstructionText">Vui lòng ghi đúng nội dung chuyển khoản để đơn hàng được xử lý tự động.</p>
-            </div>
-            <p id="paymentStatusMessage" style="margin-top: 15px; font-weight: bold; color: #00ffff;"></p>
-            <p id="paymentCountdown">Thời gian còn lại: 30:00</p>
-        </div>
+        <div class="payment-modal-content">
+            <span class="close-button" onclick="closePaymentModal()">&times;</span>
+            <h2 id="paymentPlanTitle">Thanh Toán Gói <span id="modalPlanNameDisplay"></span></h2> 
             
-        <div id="contactAdminMessage" style="display: none;">
-            <p>Bạn cần liên hệ trực tiếp với Admin tại Discord server để đưa ra yêu cầu, chúng tôi sẽ dựa theo yêu cầu của bạn và quyết định mức giá.</p>
+            <div id="discordLoginSection" style="display: none;">
+                <p>Vui lòng đăng nhập Discord để tiếp tục thanh toán.</p>
+                <button class="join-discord-button cta-button" onclick="loginWithDiscord()">Đăng nhập Discord</button>
+            </div>
+
+            <div id="paymentDetailsSection" style="display: none;">
+                <p id="paymentIntroText">Vui lòng quét mã QR dưới đây để hoàn tất thanh toán.</p>
+                <div class="qr-code-container">
+                    <img id="qrCodeImage" src="" alt="Mã QR Thanh Toán" class="qr-code-image">
+                </div>
+                <div class="payment-details">
+                    <p><strong>Gói:</strong> <span id="paymentDetailsPlanName"></span></p> 
+                    <p><strong>Số tiền:</strong> <span id="selectedPlanAmount"></span> VNĐ</p>
+                    <p><strong>Nội dung chuyển khoản:</strong> <span id="transferContentText"></span></p> 
+                    <p><strong>Chủ tài khoản:</strong> <span id="displayBankAccountName"></span></p>
+                    <p><strong>Tên Ngân hàng:</strong> <span id="displayBankName"></span></p>
+                    <p><strong>Số tài khoản:</strong> <span id="bankAccountNumber"></span></p>
+                    <p class="small-text" id="paymentInstructionText">Vui lòng ghi đúng nội dung chuyển khoản để đơn hàng được xử lý tự động.</p>
+                </div>
+                <p id="paymentStatusMessage" style="margin-top: 15px; font-weight: bold; color: #00ffff;"></p>
+                <p id="paymentCountdown">Thời gian còn lại: 30:00</p>
+            </div>
+                
+            <div id="contactAdminMessage" style="display: none;">
+                <p>Bạn cần liên hệ trực tiếp với Admin tại Discord server để đưa ra yêu cầu, chúng tôi sẽ dựa theo yêu cầu của bạn và quyết định mức giá.</p>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="successModal" class="success-modal">
-    <div class="success-modal-content">
-        <span class="close-button" onclick="closeSuccessModal()">&times;</span>
-        <h2>Thanh Toán Thành Công! 🎉</h2>
-        <p>Cảm ơn bạn đã mua gói Premium!</p>
-        <p>Gói đã mua: <strong id="successPlanNameDisplay"></strong></p>
-        <p>Số tiền: <strong id="successPlanAmountDisplay"></strong> VNĐ</p>
-        
-        <p>Vui lòng nhập ID máy chủ Discord của bạn để chúng tôi nâng cấp gói:</p>
-        <p>Đã đăng nhập với: <strong id="discordUsernameDisplay"></strong> (ID: <span id="discordUserIdDisplay"></span>)</p>
-        <input type="text" id="discordServerId" class="server-id-input" placeholder="Nhập ID máy chủ Discord của bạn">
-        <button class="submit-server-id-button" onclick="submitUpgradeRequest()">Xác nhận</button>
-        <p class="small-text">Bạn có thể tìm ID máy chủ bằng cách bật chế độ nhà phát triển trong Discord, sau đó nhấp chuột phải vào tên máy chủ và chọn "Sao chép ID".</p>
+    <div id="successModal" class="success-modal">
+        <div class="success-modal-content">
+            <span class="close-button" onclick="closeSuccessModal()">&times;</span>
+            <h2>Thanh Toán Thành Công! 🎉</h2>
+            <p>Cảm ơn bạn đã mua gói Premium!</p>
+            <p>Gói đã mua: <strong id="successPlanNameDisplay"></strong></p>
+            <p>Số tiền: <strong id="successPlanAmountDisplay"></strong> VNĐ</p>
+            
+            <p>Vui lòng nhập ID máy chủ Discord của bạn để chúng tôi nâng cấp gói:</p>
+            <p>Đã đăng nhập với: <strong id="discordUsernameDisplay"></strong> (ID: <span id="discordUserIdDisplay"></span>)</p>
+            <input type="text" id="discordServerId" class="server-id-input" placeholder="Nhập ID máy chủ Discord của bạn">
+            <button class="submit-server-id-button" onclick="submitUpgradeRequest()">Xác nhận</button>
+            <p class="small-text">Bạn có thể tìm ID máy chủ bằng cách bật chế độ nhà phát triển trong Discord, sau đó nhấp chuột phải vào tên máy chủ và chọn "Sao chép ID".</p>
+        </div>
     </div>
-</div>
+    <div id="chatBubble" class="chat-bubble">
+        <img src="login.png" alt="Chat Icon" class="chat-icon">
+        <div class="feedback-label">Gửi phản hồi</div>
+    </div>
 
+    <div id="feedbackModal" class="feedback-modal">
+        <div class="feedback-modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Gửi Phản Hồi</h2>
+
+            <div id="feedbackLoginPrompt" style="display: none; text-align: center; padding: 20px;">
+                <p>Vui lòng đăng nhập Discord để gửi phản hồi cho chúng tôi.</p>
+                <button id="feedbackLoginButton" class="cta-button">Đăng nhập</button>
+            </div>
+
+            <form id="feedbackForm">
+                <div class="form-group">
+                    <label for="feedbackMessage">Tin nhắn của bạn:</label>
+                    <textarea id="feedbackMessage" rows="5" placeholder="Nhập phản hồi hoặc câu hỏi của bạn tại đây..."></textarea>
+                </div>
+                <button type="submit" class="submit-feedback-btn">Submit</button>
+            </form>
+
+            <div id="successMessage" style="display: none; text-align: center; padding: 20px; color: green; font-weight: bold;">
+                </div>
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>

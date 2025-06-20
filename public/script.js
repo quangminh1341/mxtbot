@@ -608,3 +608,178 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         document.getElementById('navLinks').classList.remove('active');
     });
 });
+document.addEventListener('DOMContentLoaded', async () => {
+    const chatBubble = document.getElementById('chatBubble');
+    const feedbackModal = document.getElementById('feedbackModal');
+    const closeButton = document.querySelector('.feedback-modal .close-button');
+    const feedbackForm = document.getElementById('feedbackForm');
+    const feedbackMessage = document.getElementById('feedbackMessage');
+    const successMessage = document.getElementById('successMessage');
+
+    // Thêm các phần tử mới cho trạng thái chưa đăng nhập
+    const feedbackLoginPrompt = document.getElementById('feedbackLoginPrompt'); // Div chứa thông báo yêu cầu đăng nhập
+    const feedbackLoginButton = document.getElementById('feedbackLoginButton'); // Nút "Đăng nhập Discord" trong modal feedback
+
+    // --- Cập nhật chatBubble click event ---
+    if (chatBubble) {
+        chatBubble.addEventListener('click', () => {
+            feedbackModal.style.display = 'flex';
+            feedbackForm.reset(); // Reset form khi mở
+
+            // Kiểm tra trạng thái đăng nhập Discord khi mở modal
+            if (discordUserData) {
+                feedbackLoginPrompt.style.display = 'none';
+                feedbackForm.style.display = 'block';
+                successMessage.style.display = 'none'; // Đảm bảo ẩn thông báo thành công
+            } else {
+                feedbackLoginPrompt.style.display = 'block';
+                feedbackForm.style.display = 'none';
+                successMessage.style.display = 'none'; // Đảm bảo ẩn thông báo thành công
+            }
+        });
+    }
+
+    // Đóng modal khi nhấp vào nút đóng
+    if (closeButton) {
+        closeButton.addEventListener('click', () => {
+            feedbackModal.style.display = 'none';
+            feedbackForm.reset();
+            feedbackForm.style.display = 'block'; // Đảm bảo form hiện ra khi đóng và mở lại
+            successMessage.style.display = 'none'; // Đảm bảo thông báo thành công ẩn khi đóng
+            feedbackLoginPrompt.style.display = 'none'; // Ẩn phần yêu cầu đăng nhập
+        });
+    }
+
+if (feedbackLoginButton) {
+        feedbackLoginButton.addEventListener('click', () => {
+            // Lưu trạng thái đang mở modal feedback
+            localStorage.setItem('redirectAfterDiscordLogin', 'feedback');
+            loginWithDiscord(); // Gọi hàm loginWithDiscord hiện có của bạn
+        });
+    }
+
+    // Xử lý gửi form
+    if (feedbackForm) {
+        feedbackForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            if (!discordUserData) {
+                alert('Vui lòng đăng nhập Discord để gửi phản hồi.');
+                // Có thể hiển thị lại prompt đăng nhập nếu form đã hiển thị bằng cách nào đó
+                feedbackLoginPrompt.style.display = 'block';
+                feedbackForm.style.display = 'none';
+                return; // Dừng hàm nếu chưa đăng nhập
+            }
+
+            const message = feedbackMessage.value.trim();
+
+            if (message) {        
+                try {
+                    const response = await fetch('/api/submit-feedback', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: message,
+                            userId: discordUserData.id, // Gửi Discord User ID
+                            username: discordUserData.global_name || discordUserData.username, // Gửi Discord Username
+                            email: discordUserData.email || null // Gửi email nếu có
+                        })
+                    });
+                    const data = await response.json(); // Nhận phản hồi từ server
+
+                    if (data.success) {
+                        alert('Bạn đã gửi phản hồi thành công, chúng tôi sẽ sớm trả lời bạn bằng tin nhắn Discord. Xin cảm ơn !');
+                        feedbackForm.style.display = 'none';
+                        successMessage.style.display = 'flex';
+                        // Tự động đóng modal sau vài giây
+                        setTimeout(() => {
+                            feedbackModal.style.display = 'none';
+                            feedbackForm.reset(); // Reset form
+                            feedbackForm.style.display = 'block'; // Đảm bảo form hiện ra khi đóng và mở lại
+                            successMessage.style.display = 'none'; // Đảm bảo thông báo thành công ẩn khi đóng
+                            feedbackLoginPrompt.style.display = 'none'; // Ẩn phần yêu cầu đăng nhập
+                        }, 1000); // Đóng sau 3 giây
+                    } else {
+                        console.error('Lỗi gửi phản hồi từ server:', data.message);
+                        alert('Có lỗi xảy ra khi gửi phản hồi: ' + (data.message || 'Lỗi không xác định.'));
+                        // Nếu lỗi, đảm bảo form vẫn hiển thị
+                        feedbackForm.style.display = 'block';
+                        successMessage.style.display = 'none';
+                    }
+
+                } catch (error) {
+                    console.error('Lỗi mạng hoặc server khi gửi phản hồi:', error);
+                    alert('Có lỗi khi gửi phản hồi. Vui lòng thử lại.');
+
+                    // Nếu lỗi, đảm bảo form vẫn hiển thị
+                    feedbackForm.style.display = 'block';
+                    successMessage.style.display = 'none';
+                }
+
+            } else {
+                alert('Vui lòng nhập tin nhắn của bạn.');
+            }
+        });
+    }
+
+    // --- Xử lý khi quay lại từ Discord OAuth (trong DCL chính) ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const discordUserParam = urlParams.get('discord_user');
+    const error = urlParams.get('error');
+
+    if (discordUserParam) {
+        try {
+            const userData = JSON.parse(decodeURIComponent(discordUserParam));
+            discordUserData = userData;
+            localStorage.setItem('discordUserData', JSON.stringify(discordUserData));
+            updateLoginUI();
+
+            const pendingPlanName = localStorage.getItem('pendingPlanName');
+            const pendingPlanPrice = localStorage.getItem('pendingPlanPrice');
+            const redirectAfterLogin = localStorage.getItem('redirectAfterDiscordLogin');
+
+            if (pendingPlanName && pendingPlanPrice) {
+                currentPaymentData.planName = pendingPlanName;
+                currentPaymentData.amount = parseInt(pendingPlanPrice);
+                localStorage.removeItem('pendingPlanName');
+                localStorage.removeItem('pendingPlanPrice');
+                await showPaymentModal();
+            } else if (redirectAfterLogin === 'feedback') { // Kiểm tra nếu cần mở modal feedback
+                localStorage.removeItem('redirectAfterDiscordLogin'); // Xóa cờ
+                feedbackModal.style.display = 'flex'; // Mở modal feedback
+                feedbackLoginPrompt.style.display = 'none';
+                feedbackForm.style.display = 'block';
+                alert(`Chào mừng, ${discordUserData.global_name || discordUserData.username}! Bạn đã đăng nhập thành công. Giờ bạn có thể gửi phản hồi.`);
+            } else {
+                alert(`Chào mừng, ${discordUserData.global_name || discordUserData.username}! Bạn đã đăng nhập thành công.`);
+            }
+        } catch (parseError) {
+            console.error('Lỗi khi phân tích dữ liệu người dùng Discord từ URL:', parseError);
+            alert('Lỗi khi xử lý dữ liệu Discord. Vui lòng thử lại.');
+        } finally {
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    } else if (error) {
+        alert('Lỗi Discord OAuth: ' + error);
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    // ... các sự kiện DOMContentLoaded khác của bạn
+});
+
+// Đảm bảo hàm logoutDiscord cũng đóng modal feedback nếu nó đang mở
+function logoutDiscord() {
+    localStorage.removeItem('discordUserData');
+    discordUserData = null;
+    updateLoginUI();
+    alert('Bạn đã đăng xuất khỏi Discord.');
+    window.history.replaceState({}, '', window.location.pathname);
+    closePaymentModal(); // Đóng modal thanh toán
+    closeSuccessModal(); // Đóng modal thành công
+    // Thêm dòng này để đóng feedback modal
+    document.getElementById('feedbackModal').style.display = 'none';
+    document.getElementById('feedbackForm').style.display = 'block'; // Đảm bảo form hiện ra nếu mở lại
+    document.getElementById('successMessage').style.display = 'none';
+    document.getElementById('feedbackLoginPrompt').style.display = 'none';
+}

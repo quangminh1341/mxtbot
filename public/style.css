@@ -955,3 +955,189 @@ body {
         rotate(var(--rotate, 0deg)); /* Xoay ngẫu nhiên */
     }
 }
+.chat-bubble {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px; /* Kích thước nút chat */
+    height: 60px;
+    background-color: #f37ce300; /* Màu nền nút chat */
+    color: white;
+    border-radius: 50%; /* Làm tròn thành hình tròn */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px; /* Kích thước icon nếu dùng Font Awesome */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    z-index: 1000; /* Đảm bảo nó luôn ở trên cùng */
+}
+
+.chat-bubble:hover {
+    background-color: #fcfcfc; /* Màu khi hover */
+    transform: scale(1.05); /* Hiệu ứng phồng lên */
+}
+
+.chat-bubble .chat-icon {
+    width: 55px; /* Kích thước ảnh icon */
+    height: 55px;
+    object-fit: contain;
+}
+
+/* --- Modal gửi tin nhắn --- */
+.feedback-modal {
+    display: none; /* Mặc định ẩn */
+    position: fixed;
+    z-index: 1001; /* Trên bóng chat */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Cho phép cuộn nếu nội dung dài */
+    background-color: rgba(0, 0, 0, 0.6); /* Nền mờ */
+    justify-content: center; /* Căn giữa modal theo chiều ngang */
+    align-items: center; /* Căn giữa modal theo chiều dọc */
+    padding: 20px; /* Padding cho modal container */
+}
+
+.feedback-modal-content {
+    background-color: #cf1313;
+     background-image: url('feedback.jpg'); /* THAY ĐỔI ĐƯỜNG DẪN NÀY */
+    background-size: cover; /* Hoặc 'contain', 'auto', '100% 100%' */
+    background-repeat: no-repeat; /* Hoặc 'repeat', 'repeat-x', 'repeat-y' */
+    background-position: center center;
+    margin: auto; /* Để căn giữa khi display: block; */
+    padding: 25px 30px;
+    border-radius: 10px;
+    width: 90%; /* Chiều rộng trên mobile */
+    max-width: 600px; /* Chiều rộng tối đa trên desktop */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    transform: translateY(-50px); /* Hiệu ứng trượt nhẹ */
+    opacity: 0;
+    animation: fadeInModal 0.3s forwards;
+}
+
+@keyframes fadeInModal {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.feedback-modal-content h2 {
+    text-align: center;
+    color: #020102;
+    text-shadow:
+        0 0 5px #FF00FF,   /* Bóng nhỏ, màu giống chữ */
+        0 0 10px #FF00FF,  /* Bóng lớn hơn, màu giống chữ */
+        0 0 15px #faf8fa,  /* Bóng lớn hơn nữa */
+        0 0 20px #FF00FF,
+        0 0 25px #FF00FF,
+        0 0 30px #FF00FF;
+    margin-bottom: 25px;
+    font-size: 2.2em;
+    font-weight: bold;
+}
+
+.close-button {
+    color: #0c0101;
+    text-shadow:
+        0 0 5px #ff0000,   /* Bóng nhỏ, màu giống chữ */
+        0 0 10px #ff0000,  /* Bóng lớn hơn, màu giống chữ */
+        0 0 15px #faf8fa,  /* Bóng lớn hơn nữa */
+        0 0 20px #FF00FF,
+        0 0 25px #FF00FF,
+        0 0 30px #FF00FF;
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #000;
+    text-decoration: none;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #070303;
+    font-weight: bold;
+}
+
+.form-group textarea,
+.form-group input[type="email"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box; /* Đảm bảo padding không làm tăng chiều rộng */
+    font-size: 1em;
+    resize: vertical; /* Cho phép kéo giãn chiều cao của textarea */
+}
+
+.form-group textarea:focus,
+.form-group input[type="email"]:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.submit-feedback-btn {
+    background-color: #f7414a; /* Màu nút gửi */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    width: 30%;
+    margin: 0 auto;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+.submit-feedback-btn:hover {
+    background-color: #000000; /* Màu khi hover */
+}
+.feedback-label {
+    position: absolute;
+    bottom: calc(100% + 10px); /* Đẩy gần bóng chat hơn một chút (từ 15px xuống 10px) */
+    right: 50%;
+    transform: translateX(50%);
+
+    background-color: #FFC0CB; /* Light Pink - Màu nền của nhãn */
+    color: #8B008B; /* Dark Magenta/Purple - Màu chữ */
+    padding: 4px 8px; /* Giảm padding để thu nhỏ kích thước tổng thể (từ 6px 12px) */
+    border-radius: 12px; /* Giảm độ bo tròn một chút để trông bớt "thô" (từ 15px) */
+    font-size: 0.5em; /* Giảm cỡ chữ (từ 0.85em xuống 0.75em) */
+    font-weight: bold;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Làm bóng mềm mại và nhẹ hơn (từ 0 3px 8px) */
+    z-index: 1002;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.7); /* Làm bóng chữ mềm hơn (từ 1px 1px 2px) */
+
+    animation: blink 2.5s infinite alternate; /* Giữ nguyên animation nhấp nháy */
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}

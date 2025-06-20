@@ -82,7 +82,7 @@ body {
 }
 
 .logo.custom-logo {
-    background-image: url('https://cdn.discordapp.com/attachments/1207890745684656160/1337426604401623142/ISIMG-811264.png?ex=6854c456&is=685372d6&hm=05a0fbc78ce15dd2f199539a6e101ff5156c90c25f6312f45a5b2d2489095909&'); /* Giữ nguyên ảnh logo của bạn */
+    background-image: url('https://cdn.discordapp.com/attachments/1207890745684656160/1337426604401623142/ISIMG-811264.png?ex=685615d6&is=6854c456&hm=afa055777a8db3191170f7b5f1fc7075a4aba80a90ed7aed6c94e64eb07adced&'); /* Giữ nguyên ảnh logo của bạn */
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -187,7 +187,7 @@ body {
     /* Ảnh nền "cutie" hơn */
     background:
         linear-gradient(135deg, rgba(13, 13, 26, 0.85) 0%, rgba(20, 15, 30, 0.85) 50%, rgba(25, 20, 35, 0.85) 100%), /* Lớp phủ gradient làm mờ hình ảnh và giữ màu sắc hiện tại */
-        url('https://cdn.discordapp.com/attachments/1207890745684656160/1337426604061757581/Konachan.com_-_385565_bed_black_hair_blush_bow_breasts_building_city_cleavage_dema_hmw_garter_halo_long_hair_navel_no_bra_panties_rain_red_eyes_ribbons_underwear_water.jpg?ex=6854c456&is=685372d6&hm=a1306446a1442e53d1e42233ebdc64ab7e6259b0e46cdc8a417152e089129f66&') center center / cover no-repeat fixed; /* Hình ảnh nền */
+        url('https://cdn.discordapp.com/attachments/1207890745684656160/1337426604061757581/Konachan.com_-_385565_bed_black_hair_blush_bow_breasts_building_city_cleavage_dema_hmw_garter_halo_long_hair_navel_no_bra_panties_rain_red_eyes_ribbons_underwear_water.jpg?ex=685615d6&is=6854c456&hm=c673126971939da26464c2a8b3ea6e9552f6b077412121322a1aa5c7c446d980&') center center / cover no-repeat fixed; /* Hình ảnh nền */
 }
 
 .hero-content {
